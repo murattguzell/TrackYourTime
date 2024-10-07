@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_settings"
+    app:startDestination="@id/settingsFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.muratguzel.trackyourtime.ui.fragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_accountDetailsFragment"
+            app:destination="@id/accountDetailsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_notifyPreferenscesFragment"
+            app:destination="@id/notifyPreferenscesFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_passwordOperationsFragment"
+            app:destination="@id/passwordOperationsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountDetailsFragment"
+        android:name="com.muratguzel.trackyourtime.ui.fragment.AccountDetailsFragment"
+        android:label="fragment_account_details"
+        tools:layout="@layout/fragment_account_details" />
+    <fragment
+        android:id="@+id/notifyPreferenscesFragment"
+        android:name="com.muratguzel.trackyourtime.ui.fragment.NotifyPreferencesFragment"
+        android:label="fragment_notify_preferensces"
+        tools:layout="@layout/fragment_notify_preferensces" />
+    <fragment
+        android:id="@+id/passwordOperationsFragment"
+        android:name="com.muratguzel.trackyourtime.ui.fragment.PasswordOperationsFragment"
+        android:label="fragment_password_operations"
+        tools:layout="@layout/fragment_password_operations" />
+</navigation>

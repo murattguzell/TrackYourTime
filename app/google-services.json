@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637128094737",
+    "project_id": "trackyourtime-d82f0",
+    "storage_bucket": "trackyourtime-d82f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637128094737:android:2b06222cd448b4f7a4edb0",
+        "android_client_info": {
+          "package_name": "com.muratguzel.trackyourtime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-gC1MO13JmFMk0oghVgSoZ0kB65ziKiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

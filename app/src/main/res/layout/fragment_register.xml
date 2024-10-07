@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.fragment.RegisterFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/ToolBarStyle">
+
+            <TextView
+                android:id="@+id/toolBarTitle"
+                style="@style/ToolBarTitleStyle"
+                android:layout_marginTop="20dp"
+                android:text="@string/create_account" />
+
+            <TextView
+                android:id="@+id/toolBarAlternativeTitle"
+                style="@style/ToolBarAlternativeTitleStyle"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="17dp"
+                android:text="@string/login" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout1">
+
+        <EditText
+            android:id="@+id/etNameSurName"
+            style="@style/EditTextStyle"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/et_background"
+            android:hint="@string/name_username"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            style="@style/EditTextStyle"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/et_background"
+            android:hint="@string/email" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:background="@drawable/et_background"
+                android:hint="@string/password"
+                android:paddingEnd="60dp" /> <!-- Padding ekledik ki textView ile çakışmasın -->
+
+            <TextView
+                android:id="@+id/tvTogglePasswordVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:padding="15dp"
+                android:text="Göster"
+                android:textSize="16sp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </FrameLayout>
+
+
+        <Button
+            android:id="@+id/registerButton"
+            style="@style/RegisterButtonStyle"
+            android:layout_marginTop="60dp"
+            android:text="@string/create_account"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

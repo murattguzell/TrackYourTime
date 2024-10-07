@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#5D7EB0</color>
+    <color name="googleLightButtonSolid">#F6F6F6</color>
+    <color name="googleLightButtonStroke">#E8E8E8</color>
+    <color name="registerButtonSolid">#5D7EB0</color>
+    <color name="etBackgroundSolid">#F6F6F6</color>
+    <color name="etBackgroundStroke">#E8E8E8</color>
+    <color name="bottomNavigationCanopy">#BDC5CD</color>
+</resources>

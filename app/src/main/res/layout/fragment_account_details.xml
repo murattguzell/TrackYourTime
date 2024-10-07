@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.fragment.AccountDetailsFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutAccountDetailsToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Toolbar
+            style="@style/ToolBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvBack"
+                style="@style/ToolBarAlternativeTitleStyle"
+                android:layout_gravity="start"
+                android:text="Geri"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/settingsToolBarTitle"
+                style="@style/ToolBarTitleStyle"
+                android:text="Hesap Detayları" />
+        </Toolbar>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/lyAccountDetails"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutAccountDetailsToolBar">
+
+
+        <EditText
+            android:id="@+id/etNameSurName"
+            style="@style/EditTextStyle"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/et_background"
+            android:hint="İsim soyisim"
+            android:inputType="text" />
+
+
+        <EditText
+            android:id="@+id/etEPoasta"
+            style="@style/EditTextStyle"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/et_background"
+            android:hint="E-posta"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/registerButton"
+            style="@style/RegisterButtonStyle"
+            android:layout_marginTop="172dp"
+            android:text="kaydet"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.fragment.RegisterFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/ToolBarStyle">
+
+            <TextView
+                android:id="@+id/ToolBarTitle"
+                style="@style/ToolBarTitleStyle"
+                android:layout_marginTop="20dp"
+                android:text="@string/sign_in" />
+
+            <TextView
+                android:id="@+id/toolBarAlternativeTitle"
+                style="@style/ToolBarAlternativeTitleStyle"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="17dp"
+                android:text="@string/register" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="17dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout1">
+
+        <EditText
+            android:id="@+id/emailEditText"
+            style="@style/EditTextStyle"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/et_background"
+            android:hint="@string/email" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp">
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/et_background"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingEnd="60dp" /> <!-- Padding ekledik ki textView ile çakışmasın -->
+
+            <TextView
+                android:id="@+id/tvOldPasswordShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="15dp"
+                android:text="Göster"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <CheckBox
+            android:id="@+id/checkBoxRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="20dp"
+            android:buttonTint="@color/blue"
+            android:text="@string/remember_me" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            style="@style/RegisterButtonStyle"
+            android:layout_marginTop="60dp"
+            android:text="@string/sign_in"
+            android:textAllCaps="false" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/googleButton"
+            style="@style/GoogleButtonStyle"
+            android:layout_marginTop="17dp"
+            android:text="@string/continue_with_google" />
+
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            style="@style/ForgotPasswordTextStyle"
+            android:layout_marginTop="10dp"
+            android:text="@string/forgot_your_password" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
