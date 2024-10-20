@@ -1,12 +1,8 @@
 package com.muratguzel.trackyourtime.data.dataSource
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -19,7 +15,7 @@ class AuthDataSource {
     suspend fun registerUser(
         userName: String,
         email: String,
-        password: String
+        password: String,
     ): Boolean = suspendCancellableCoroutine { continuation ->
         if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Log.e("AuthDataSource", "registerUser:failure")
@@ -34,9 +30,7 @@ class AuthDataSource {
                                 userId = userId,
                                 fullName = userName,
                                 email = email,
-                                createDate = com.google.firebase.Timestamp.now(),
-                                updateDate = null,
-                                deleteDate = null,
+                                password = password
                             )
 
                             mFireStore.collection("users").document(userId).set(savedUsers)
@@ -45,7 +39,11 @@ class AuthDataSource {
                                         Log.e("AuthDataSource", "registerUser:success")
                                         continuation.resume(true)  // Başarılı, true döndür
                                     } else {
-                                        Log.e("AuthDataSource", "registerUser:failure", dbTask.exception)
+                                        Log.e(
+                                            "AuthDataSource",
+                                            "registerUser:failure",
+                                            dbTask.exception
+                                        )
                                         continuation.resume(false)  // Firestore hatası
                                     }
                                 }.addOnFailureListener { exception ->
@@ -60,31 +58,66 @@ class AuthDataSource {
                     }
                 }.addOnFailureListener { exception ->
                     Log.e("AuthDataSource", "registerUser:failure", exception)
-                    continuation.resume(false)  // Firebase auth hatası
+
                 }
         }
     }
-  suspend fun loginUser(email: String, password: String) :Boolean = suspendCancellableCoroutine{continuation->
 
-        if (email.isEmpty() || password.isEmpty()) {
-            continuation.resume(false)
-            Log.e("AuthDataSource", "loginUser:failure - Empty email or password")
-        } else {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                 continuation.resume(true)
+    suspend fun loginUser(email: String, password: String): Boolean =
+        suspendCancellableCoroutine { continuation ->
 
-                } else {
-                    continuation.resume(false)
-                    Log.e("AuthDataSource", "loginUser:failure", task.exception)
-                }
-            }.addOnFailureListener { exception ->
+            if (email.isEmpty() || password.isEmpty()) {
                 continuation.resume(false)
-                Log.e("AuthDataSource", "loginUser:failure", exception)
-            }
+                Log.e("AuthDataSource", "loginUser:failure - Empty email or password")
+            } else {
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        continuation.resume(true)
 
+                    } else {
+                        continuation.resume(false)
+                        Log.e("AuthDataSource", "loginUser:failure", task.exception)
+                    }
+                }.addOnFailureListener { exception ->
+                    Log.e("AuthDataSource", "loginUser:failure", exception)
+                }
+
+            }
+        }
+
+    suspend fun signOut(): Boolean = suspendCancellableCoroutine { continuation ->
+        mAuth.signOut()
+        continuation.resume(true)
+    }
+
+    suspend fun currentUserNavigate(): Boolean = suspendCancellableCoroutine { continuation ->
+        val currentUser = mAuth.currentUser
+        if (currentUser != null) {
+            continuation.resume(true)
+        } else {
+            continuation.resume(false)
         }
     }
+
+    suspend fun getUserData(): Users = suspendCancellableCoroutine { continuation ->
+        val currentUser = mAuth.currentUser
+        if (currentUser!= null){
+            mFireStore.collection("users").document(mAuth.currentUser!!.uid)
+                .addSnapshotListener { value, error ->
+                    if (value != null) {
+                        val userData = value.toObject(Users::class.java)
+                        if (userData != null) {
+                            continuation.takeIf { it.isActive }?.resume(userData)
+
+                        }
+                    }
+                }
+        }
+
+
+    }
+
+
 
 
 }

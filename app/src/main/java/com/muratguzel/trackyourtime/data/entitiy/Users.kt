@@ -1,18 +1,16 @@
 package com.muratguzel.trackyourtime.data.entitiy
 
-import com.google.firebase.Timestamp
+import java.io.Serializable
 
 data class Users(
     var userId: String?=null,
     var fullName: String? = null,
     var email:String?= null,
-    var createDate: Timestamp?=null,
-    var updateDate: Timestamp?=null,
-    var deleteDate: Timestamp?=null,
-    var active:Boolean = false,
-){
+    var profileImage: String? = null,
+    var password: String? = null
 
+):Serializable{
     override fun toString(): String {
-        return "Users(userId=$userId, fullName=$fullName, email=$email, createDate=$createDate, updateDate=$updateDate, deleteDate=$deleteDate, active=$active)"
+        return "Users(userId=$userId, fullName=$fullName, email=$email, profileImage=$profileImage, password=$password)"
     }
 }

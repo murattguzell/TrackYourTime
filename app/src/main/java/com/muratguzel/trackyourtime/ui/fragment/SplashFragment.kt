@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.muratguzel.trackyourtime.R
-import com.muratguzel.trackyourtime.databinding.FragmentLoginBinding
 import com.muratguzel.trackyourtime.databinding.FragmentSplashBinding
 import com.muratguzel.trackyourtime.ui.MainActivity
+import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 
 
 class SplashFragment : Fragment() {
@@ -22,25 +21,10 @@ class SplashFragment : Fragment() {
     // This property is only valid between onCreateView and
 // onDestroyView.
     private val binding get() = _binding!!
-    private val mAuth = Firebase.auth
+    private lateinit var authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val currentUser = mAuth.currentUser
-        if (currentUser != null) {
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        } else {
-            val action = SplashFragmentDirections.actionSplashFragmentToRegisterFragment()
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(
-                    R.id.splashFragment,
-                    true
-                )  // Geçiş yapılan fragment'ı backstack'ten sil
-                .build()
-            Navigation.findNavController(requireView()).navigate(action, navOptions)
-        }
     }
 
     override fun onCreateView(
@@ -55,6 +39,25 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        authViewModel.currentUserNavigateState.observe(viewLifecycleOwner){ currentUserRedirectionState->
+            if (currentUserRedirectionState){
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+            else{
+                val action =SplashFragmentDirections.actionSplashFragmentToRegisterFragment()
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(
+                        R.id.splashFragment,
+                        true
+                    )
+                Navigation.findNavController(binding.root).navigate(action,navOptions.build())
+            }
+
+        }
+
 
     }
 

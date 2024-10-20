@@ -30,7 +30,7 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/settingsToolBarTitle"
+                android:id="@+id/tool_bar_title"
                 style="@style/ToolBarTitleStyle"
                 android:text="Hesap Detayları" />
         </Toolbar>

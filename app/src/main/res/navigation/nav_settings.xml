@@ -14,9 +14,6 @@
             android:id="@+id/action_settingsFragment_to_accountDetailsFragment"
             app:destination="@id/accountDetailsFragment" />
         <action
-            android:id="@+id/action_settingsFragment_to_notifyPreferenscesFragment"
-            app:destination="@id/notifyPreferenscesFragment" />
-        <action
             android:id="@+id/action_settingsFragment_to_passwordOperationsFragment"
             app:destination="@id/passwordOperationsFragment" />
     </fragment>
@@ -24,15 +21,38 @@
         android:id="@+id/accountDetailsFragment"
         android:name="com.muratguzel.trackyourtime.ui.fragment.AccountDetailsFragment"
         android:label="fragment_account_details"
-        tools:layout="@layout/fragment_account_details" />
-    <fragment
-        android:id="@+id/notifyPreferenscesFragment"
-        android:name="com.muratguzel.trackyourtime.ui.fragment.NotifyPreferencesFragment"
-        android:label="fragment_notify_preferensces"
-        tools:layout="@layout/fragment_notify_preferensces" />
+        tools:layout="@layout/fragment_account_details" >
+        <action
+            android:id="@+id/action_accountDetailsFragment_to_updateSignInFragment"
+            app:destination="@id/updateSignInFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/passwordOperationsFragment"
         android:name="com.muratguzel.trackyourtime.ui.fragment.PasswordOperationsFragment"
         android:label="fragment_password_operations"
-        tools:layout="@layout/fragment_password_operations" />
+        tools:layout="@layout/fragment_password_operations" >
+        <action
+            android:id="@+id/action_passwordOperationsFragment_to_updateSignInFragment"
+            app:destination="@id/updateSignInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateSignInFragment"
+        android:name="com.lideatech.imeiguard.ui.fragment.UpdateSignInFragment"
+        android:label="UpdateSignInFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.muratguzel.trackyourtime.data.entitiy.Users" />
+        <argument
+            android:name="fullName"
+            app:argType="string" />
+        <argument
+            android:name="newEmail"
+            app:argType="string" />
+        <argument
+            android:name="info"
+            app:argType="string" />
+        <argument android:name="newPassword"
+            app:argType="string" />
+    </fragment>
 </navigation>

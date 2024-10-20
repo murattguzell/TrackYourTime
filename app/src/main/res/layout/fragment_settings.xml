@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.fragment.SettingsFragment">
 
     <LinearLayout
@@ -26,7 +27,7 @@
                 android:src="@drawable/back_icon" />
 
             <TextView
-                android:id="@+id/settingsToolBarTitle"
+                android:id="@+id/tool_bar_title"
                 style="@style/ToolBarTitleStyle"
                 android:text="Ayarlar" />
         </Toolbar>
@@ -38,93 +39,65 @@
         android:id="@+id/linearLayoutSettings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:layout_marginStart="25dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="17dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSettingsToolBar" >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSettingsToolBar">
 
         <TextView
             android:id="@+id/tvAccountDetails"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_height="60dp"
+            android:padding="10dp"
             android:text="Hesap Detayları"
             android:textColor="@color/black"
-            android:padding="10dp"/>
+            android:textSize="18sp" />
+
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
-        <TextView
-            android:id="@+id/tvMyDevices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Cihazlar"
-            android:textColor="@color/black"
-            android:padding="10dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
+            android:background="@color/etBackgroundStroke" />
+
         <TextView
             android:id="@+id/tvPasswordOperations"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:gravity="center_vertical"
+            android:layout_height="60dp"
+            android:padding="10dp"
             android:text="Şifre işlemleri"
             android:textColor="@color/black"
-            android:padding="10dp"/>
+            android:textSize="18sp" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
+            android:background="@color/etBackgroundStroke" />
+
+
         <TextView
+            android:id="@+id/tvSignOut"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Bildirim tercihleri"
+            android:gravity="center_vertical"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:text="Oturumu kapat"
             android:textColor="@color/black"
-            android:padding="10dp"/>
+            android:textSize="18sp" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
-        <TextView
-            android:id="@+id/tvNotficationPreferences"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Bizi puanla"
-            android:textColor="@color/black"
-            android:padding="10dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
-        <TextView
-            android:id="@+id/tvUseragreement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Kullanıcı sözleşmesi"
-            android:textColor="@color/black"
-            android:padding="10dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke"/>
+            android:background="@color/etBackgroundStroke" />
     </LinearLayout>
 
 

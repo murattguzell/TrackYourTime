@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp"
+        app:cardCornerRadius="14dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/alertTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30sp"
+                android:text="Dikkat!"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/alertMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:text="Oturumunuzu kapatmak üzeresiniz emin misiniz?"
+                    android:textSize="24sp" />
+
+                <View
+                    android:id="@+id/alertView"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@+id/alertView"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginBottom="17dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/alertYes"
+                        style="@style/RegisterButtonStyle"
+                        android:text="Oturumu kapat"
+                        android:textAllCaps="true"/>
+
+                    <Button
+                        android:id="@+id/alertNo"
+                        android:layout_marginTop="20dp"
+                        style="@style/GoogleButtonStyle"
+                        android:text="Geri dön"
+                        android:textAllCaps="true"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

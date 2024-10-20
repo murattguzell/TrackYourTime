@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.fragment.RegisterFragment">
+    tools:context=".ui.fragment.UpdateSignInFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="0dp"
+        android:layout_width="412dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
                 android:id="@+id/ToolBarTitle"
                 style="@style/ToolBarTitleStyle"
                 android:layout_marginTop="20dp"
-                android:text="@string/sign_in" />
+                android:text="Güncelleme işlemini tamamlamak için bilgileriniz giriniz" />
 
             <TextView
                 android:id="@+id/toolBarAlternativeTitle"
@@ -38,18 +38,18 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="378dp"
+        android:layout_height="507dp"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="17dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout1">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
         <EditText
-            android:id="@+id/emailEditText"
+            android:id="@+id/etEmail"
             style="@style/EditTextStyle"
             android:layout_marginTop="30dp"
             android:background="@drawable/et_background"
@@ -61,7 +61,7 @@
             android:layout_marginTop="17dp">
 
             <EditText
-                android:id="@+id/passwordEditText"
+                android:id="@+id/etPassword"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,26 +85,17 @@
 
         </FrameLayout>
 
-        <CheckBox
-            android:id="@+id/checkBoxRememberMe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:buttonTint="@color/blue"
-            android:text="@string/remember_me" />
-
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginButton"
+            android:id="@+id/confirmButton"
             style="@style/RegisterButtonStyle"
             android:layout_marginTop="60dp"
-            android:text="@string/sign_in"
+            android:text="Onayla"
             android:textAllCaps="false" />
 
         <TextView
             android:id="@+id/tvForgotPassword"
             style="@style/ForgotPasswordTextStyle"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:text="@string/forgot_your_password" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
