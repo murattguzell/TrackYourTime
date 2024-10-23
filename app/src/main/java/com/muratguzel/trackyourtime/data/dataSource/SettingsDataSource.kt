@@ -42,16 +42,17 @@ class SettingsDataSource {
                         if (signInTesk.isSuccessful) {
                             mAuth.currentUser?.verifyBeforeUpdateEmail(newEmail)
                                 ?.addOnCompleteListener { updateTask ->
+                                    continuation.resume(true)
                                     if (updateTask.isSuccessful) {
                                         if (mAuth.currentUser?.isEmailVerified == true) {
                                             mFireStore.collection("users").document(user.userId!!)
                                                 .update("email", newEmail).addOnSuccessListener {
-                                                    continuation.resume(true)
+
                                                 }
                                         }
 
                                     } else {
-                                        continuation.resume(false)
+
                                         Log.e(
                                             "Email Update",
                                             "Failed to send verification email.",

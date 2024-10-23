@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             insets
 
         }
+        window.statusBarColor = resources.getColor(R.color.statusBarColor)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

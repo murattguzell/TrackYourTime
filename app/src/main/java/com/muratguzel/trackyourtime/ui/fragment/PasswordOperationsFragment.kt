@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.FragmentPasswordOperationsBinding
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
@@ -19,7 +21,6 @@ class PasswordOperationsFragment : Fragment() {
     private var _binding: FragmentPasswordOperationsBinding? = null
     private val binding get() = _binding!!
     private lateinit var authViewModel: AuthViewModel
-    private lateinit var settingsViewModel: SettingsViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,6 @@ class PasswordOperationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         binding.registerButton.setOnClickListener {
@@ -80,6 +80,9 @@ class PasswordOperationsFragment : Fragment() {
                 binding.tvNewPasswordAgainShow.text = "Göster"
             }
             binding.etNewPasswordAgain.setSelection(currentCursorPosition)
+        }
+        binding.tvBack.setOnClickListener {
+            findNavController().popBackStack(R.id.settingsFragment, false)
         }
 
     }

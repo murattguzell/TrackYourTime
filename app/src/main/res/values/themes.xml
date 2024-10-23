@@ -1,18 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.TrackYourTime" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name ="android:statusBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.TrackYourTime" parent="Base.Theme.TrackYourTime" />
+
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="windowSplashScreenAnimatedIcon" tools:ignore="NewApi">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.TrackYourTime</item>
+    </style>
 
 
     <style name="GoogleButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="backgroundTint">@null</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:background">@drawable/google_button_background</item>
 
         <item name="android:gravity">center_vertical|center_horizontal</item>
@@ -31,6 +38,7 @@
         <item name="textAllCaps">false</item>
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="DeleteButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -48,10 +56,11 @@
         <item name="android:padding">15dp</item>
 
     </style>
-    <style name="CheckBoxStyle" >
+
+    <style name="CheckBoxStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="buttonTint">@color/blue</item>
+        <item name="buttonTint">@color/checkBoxBlue</item>
     </style>
 
     <style name="ToolBarStyle">
@@ -66,7 +75,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/textColor</item>
         <item name="android:textSize">30sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -87,22 +96,179 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@color/blue</item> <!-- Mavi arka plan rengi -->
-        <item name="colorAccent">@color/white</item>
-    </style>
 
-    <style name="CustomTimePickerDialog" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@color/blue</item> <!-- Mavi arka plan rengi -->
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+
         <item name="colorAccent">@color/blue</item>
 
+
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     </style>
-        <style name="CustomCalendarView">
-            <item name="android:background">@color/blue</item>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="CustomTimePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="colorAccent">@color/blue</item>
 
 
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
 
 
-        </style>
+    </style>
+    <style name="CustomDialogButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/blue</item>
+    </style>
 
+    <style name="CustomButtonBar">
+        <item name="android:padding">16dp</item>
+        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+
+    <style name="CountDownRowTitleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/cardTitleBackground</item>
+
+
+    </style>
+
+    <style name="CountDownRowTargetTimeTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/cardTitleBackground</item>
+
+    </style>
+
+    <style name="CircularProgressBar">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">150dp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progress">100</item>
+        <item name="android:progressDrawable">@drawable/circular_progress_bar</item>
+    </style>
+
+    <style name="CountDownTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignStart">@id/circularProgressBar</item>
+        <item name="android:layout_alignTop">@id/circularProgressBar</item>
+        <item name="android:layout_alignEnd">@id/circularProgressBar</item>
+        <item name="android:layout_alignBottom">@id/circularProgressBar</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/cardTitleBackground</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DateAndTimeSetTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TVDateTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:background">@drawable/et_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="CountDetailEditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/et_background</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:ems">10</item>
+        <item name="android:maxLength">200</item>
+        <item name="android:maxLines">5</item>
+        <item name="android:inputType">textMultiLine</item>
+
+    </style>
+
+    <style name="TVPasswordShowStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end|center_vertical</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="TVUserNameStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="TVMyCountStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">@drawable/tv_my_device_border</item>
+    </style>
+
+    <style name="TVSettingsStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">10dp</item>
+
+    </style>
+
+    <style name="ViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/etBackgroundStroke</item>
+    </style>
+
+    <style name="ProfileRowTargetTimesStyle">
+        <item name="android:textColor">@color/cardTitleBackground</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+
+    </style>
+
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/blue</item>
+        <item name="colorPrimary">@color/white</item>
+    </style>
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:weekNumberColor">@android:color/white</item>
+        <item name="android:headerYearTextAppearance">@android:color/black</item>
+    </style>
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

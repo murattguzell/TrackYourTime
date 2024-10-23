@@ -30,7 +30,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/white"
+        android:background="@color/bottom_background"
         app:itemActiveIndicatorStyle="@color/blue"
         app:itemIconTint="@drawable/menu_custom"
         app:itemTextColor="@drawable/menu_custom"

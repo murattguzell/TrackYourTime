@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="statusBarColor">#252525</color>
+    <color name="calendarStatusBarColor">#5D7EB0</color>
+
+    <color name="background_fragment">#252525</color>
+    <color name="calendar_background">#252525</color>
+    <color name="bottom_background">#252525</color>
+    <color name="background_dialog">#252525</color>
+    <color name="blue">#5D7EB0</color>
+    <color name="checkBoxBlue">#5D7EB0</color>
+    <color name="cardTitleBackground">#FFFF</color>
+
+    <color name="googleLightButtonSolid">#4B4B4B</color>
+    <color name="googleLightButtonStroke">#7F7F7F</color>
+    <color name="registerButtonSolid">#5D7EB0</color>
+    <color name="etBackgroundSolid">#4F4F4F</color>
+    <color name="etBackgroundStroke">#7F7F7F</color>
+    <color name="bottomNavigationCanopy">#313234</color>
+    <color name="textColor">#FFFFFFFF</color>
+</resources>

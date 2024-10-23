@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation (libs.glide)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.core.splashscreen)
 
 
 

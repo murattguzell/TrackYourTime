@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.SettingsFragment">
 
     <LinearLayout
@@ -22,6 +22,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/backIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/back_icon" />
@@ -29,7 +30,7 @@
             <TextView
                 android:id="@+id/tool_bar_title"
                 style="@style/ToolBarTitleStyle"
-                android:text="Ayarlar" />
+                android:text="@string/settings" />
         </Toolbar>
 
     </LinearLayout>
@@ -51,53 +52,32 @@
 
         <TextView
             android:id="@+id/tvAccountDetails"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="60dp"
-            android:padding="10dp"
-            android:text="Hesap Detayları"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            style="@style/TVSettingsStyle"
+            android:text="@string/account_details" />
 
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke" />
+            style="@style/ViewStyle"
+            android:layout_marginStart="10dp" />
 
         <TextView
             android:id="@+id/tvPasswordOperations"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="60dp"
-            android:padding="10dp"
-            android:text="Şifre işlemleri"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            style="@style/TVSettingsStyle"
+            android:text="@string/password_operations" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke" />
+            style="@style/ViewStyle"
+            android:layout_marginStart="10dp" />
 
 
         <TextView
             android:id="@+id/tvSignOut"
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="60dp"
-            android:padding="10dp"
-            android:text="Oturumu kapat"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            style="@style/TVSettingsStyle"
+            android:text="@string/log_out" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/etBackgroundStroke" />
+            style="@style/ViewStyle"
+            android:layout_marginStart="10dp" />
     </LinearLayout>
 
 

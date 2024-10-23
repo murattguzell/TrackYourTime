@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.RegisterFragment">
 
     <LinearLayout
@@ -72,26 +72,17 @@
 
             <TextView
                 android:id="@+id/tvPasswordShow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="15dp"
-                android:text="Göster"
-                android:textColor="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                style="@style/TVPasswordShowStyle"
+                android:text="@string/show" />
 
         </FrameLayout>
 
         <CheckBox
             android:id="@+id/checkBoxRememberMe"
+            style="@style/CheckBoxStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="20dp"
-            android:buttonTint="@color/blue"
             android:text="@string/remember_me" />
 
         <com.google.android.material.button.MaterialButton

@@ -28,7 +28,7 @@ open class CountDownFragment : Fragment() {
     var adapter: CountDownTimeAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().window.statusBarColor = resources.getColor(R.color.white)
+        requireActivity().window.statusBarColor = resources.getColor(R.color.statusBarColor)
 
     }
 
@@ -63,6 +63,7 @@ open class CountDownFragment : Fragment() {
 
         // Veriyi çek
         fetchDataForUser()
+
         return view    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,6 +93,7 @@ open class CountDownFragment : Fragment() {
                     adapter!!.countDownTimeList.clear() // Önceki verileri temizle
                     adapter!!.countDownTimeList.addAll(countDownList)
                     adapter!!.notifyDataSetChanged() // Adapter'ı güncelle
+
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(requireContext(), "Veri çekme hatası: ${exception.message}", Toast.LENGTH_SHORT).show()

@@ -55,6 +55,14 @@ class UpdateSignInFragment : Fragment() {
         settingsViewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
         observeLiveData()
         binding.confirmButton.setOnClickListener {
+            if (info =="email") {
+                settingsViewModel.updateEmail(
+                    user!!,
+                    binding.etEmail.text.toString(),
+                    newEmail!!,
+                    binding.etPassword.text.toString())
+
+            }
          if(info == "password") {
              settingsViewModel.updatePassword(
                  newPassword!!,
@@ -64,17 +72,11 @@ class UpdateSignInFragment : Fragment() {
              )
 
          }
-          if (info =="email") {
-             settingsViewModel.updateEmail(
-                 user!!,
-                 binding.etEmail.text.toString(),
-                 newEmail!!,
-                 binding.etPassword.text.toString())
 
-        }
 
         }
         binding.tvPasswordShow.setOnClickListener {
+            val currentCursorPosition = binding.etPassword.selectionStart
             if (binding.tvPasswordShow.text.toString() == "Göster"){
                 binding.etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 binding.tvPasswordShow.text = "Gizle"
@@ -83,6 +85,7 @@ class UpdateSignInFragment : Fragment() {
 
                 binding.tvPasswordShow.text = "Göster"
             }
+            binding.etPassword.setSelection(currentCursorPosition)
         }
     }
 
@@ -105,6 +108,8 @@ class UpdateSignInFragment : Fragment() {
         settingsViewModel.updateStatus.observe(viewLifecycleOwner) { updateStatus ->
             if (updateStatus) {
                 showDialog()
+            } else {
+                Toast.makeText(requireContext(), "Güncelleme başarısız.", Toast.LENGTH_SHORT).show()
             }
         }
         settingsViewModel.updatePasswordStatus.observe(viewLifecycleOwner){updatePasswordStatus->

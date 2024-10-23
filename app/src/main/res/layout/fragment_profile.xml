@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.ProfileFragment">
 
     <Toolbar
@@ -21,21 +21,21 @@
         <TextView
             android:id="@+id/profileToolBarTitle"
             style="@style/ToolBarTitleStyle"
-            android:text="Profil"
+            android:text="@string/profile"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvSignOut"
             style="@style/ToolBarAlternativeTitleStyle"
             android:layout_marginEnd="17dp"
-            android:text="Çıkış"
+            android:text="@string/sign_out"
             android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/tvSettings"
             style="@style/ToolBarAlternativeTitleStyle"
             android:layout_gravity="start"
-            android:text="Ayarlar"
+            android:text="@string/settings"
             android:textColor="@color/white" />
     </Toolbar>
 
@@ -77,31 +77,20 @@
 
         <TextView
             android:id="@+id/tvUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/black"
-            android:gravity="center"/>
+            style="@style/TVUserNameStyle" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sayaçlarım"
+            android:id="@+id/tvMyCount"
+            style="@style/TVMyCountStyle"
+            android:text="@string/my_count"
             android:layout_marginTop="30dp"
             android:layout_marginStart="17dp"
-            android:layout_marginEnd="17dp"
-            android:textColor="@color/blue"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:background="@drawable/tv_my_device_border"
-            android:padding="15dp"/>
+            android:layout_marginEnd="17dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="15dp"
             android:layout_height="match_parent" />
     </LinearLayout>
 

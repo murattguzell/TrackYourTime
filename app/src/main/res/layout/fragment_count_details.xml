@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.CountDetailsFragment">
 
 
@@ -34,8 +34,7 @@
 
             <TextView
                 android:id="@+id/tool_bar_title"
-                style="@style/ToolBarTitleStyle"
-                />
+                style="@style/ToolBarTitleStyle" />
         </Toolbar>
     </LinearLayout>
 
@@ -63,12 +62,10 @@
 
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/DateAndTimeSetText"
+                style="@style/DateAndTimeSetTextStyle"
                 android:layout_marginTop="30dp"
-                android:text="Lütfen tarih ve saat seçiniz!"
-                android:textColor="@color/black"
-                android:textSize="24sp" />
+                android:text="@string/select_date_and_time" />
 
 
             <LinearLayout
@@ -91,16 +88,10 @@
 
                     <TextView
                         android:id="@+id/tvDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        style="@style/TVDateTextStyle"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="5dp"
-                        android:background="@drawable/et_background"
-                        android:gravity="center"
-                        android:paddingEnd="20dp"
-                        android:text="12.10.2024"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:paddingEnd="20dp" />
 
                     <ImageView
                         android:id="@+id/imageView5"
@@ -115,19 +106,11 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/tvTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/et_background"
-                        android:gravity="center"
-                        android:text="22:30"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        style="@style/TVDateTextStyle" />
 
                     <ImageView
                         android:id="@+id/imageView6"
@@ -157,15 +140,9 @@
 
                 <EditText
                     android:id="@+id/etImportanceOfTheDay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/CountDetailEditTextStyle"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/et_background"
-                    android:ems="10"
-                    android:maxLines="5"
-                    android:maxLength="200"
-                    android:hint="O günün önemi nedir?"
-                    android:inputType="textMultiLine"
+                    android:hint="@string/count_title"
                     android:padding="16dp" />
 
             </LinearLayout>
@@ -188,15 +165,9 @@
 
                 <EditText
                     android:id="@+id/etYourNotes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    style="@style/CountDetailEditTextStyle"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/et_background"
-                    android:ems="10"
-                    android:maxLength="200"
-                    android:maxLines="5"
-                    android:hint="Notlarınız"
-                    android:inputType="textMultiLine"
+                    android:hint="@string/your_notes"
                     android:padding="16dp" />
 
             </LinearLayout>
@@ -223,27 +194,21 @@
             android:id="@+id/btnRegister"
             style="@style/RegisterButtonStyle"
             android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kaydet" />
+            android:text="@string/save" />
 
 
         <Button
             android:id="@+id/btnUpdate"
             style="@style/GoogleButtonStyle"
-            android:layout_width="match_parent"
             android:layout_marginBottom="20dp"
-            android:layout_height="wrap_content"
-            android:text="Güncelle" />
+            android:text="@string/update" />
 
 
         <Button
             android:id="@+id/btnDelete"
             style="@style/DeleteButtonStyle"
             android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sil" />
+            android:text="@string/delete" />
     </LinearLayout>
 
 

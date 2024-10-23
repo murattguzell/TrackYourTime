@@ -20,13 +20,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.Util.imageDownload
 import com.muratguzel.trackyourtime.Util.placeHolderCreate
+import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentProfileBinding
 import com.muratguzel.trackyourtime.ui.AuthActivity
 import com.muratguzel.trackyourtime.ui.SettingsActivity
+import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
+import com.muratguzel.trackyourtime.ui.adapter.LinearProgressAdapter
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
 
@@ -39,6 +46,9 @@ class ProfileFragment : Fragment() {
     private var photoUri : Uri? = null
     private var fullName:String? =null
     private lateinit var settingsViewModel: SettingsViewModel
+    private val mAuth = Firebase.auth
+    private val mFireStore = Firebase.firestore
+    var adapter: LinearProgressAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +60,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(),R.color.blue)
         val view = binding.root
         return view
     }
@@ -58,7 +69,25 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         settingsViewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
+        adapter = LinearProgressAdapter(arrayListOf()) { countDownTime ->
+            // Tıklama olduğunda geçiş yap
+            val fragment = CountDetailsFragment()
+            val bundle = Bundle().apply {
+                putSerializable("countDownData", countDownTime) // Tüm veriyi gönder
+                var old = "old"
+                putString("info",old)
+            }
+            fragment.arguments = bundle
 
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.homeContainer, fragment) // Hedef container
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+        fetchDataForUser()
         registerLauncher()
         observeLiveData()
         authViewModel.getUserData()
@@ -73,14 +102,20 @@ class ProfileFragment : Fragment() {
         binding.circleImage.setOnClickListener {
             selectImage()
         }
+
     }
 
     private fun signOutDialog(){
+        val alertTitle = context?.getString(R.string.alert_title)
+        val alertMessage = context?.getString(R.string.alert_message)
+        val logoutText = context?.getString(R.string.logout)
+        val goBackText = context?.getString(R.string.go_back)
+
         val customDialog = CustomDialog(requireContext(),
-            "Dikkat!",
-            "Oturumu kapatmak üzeresiniz emin misiniz?",
-            "Oturumu sonlandır",
-            "Geri dön",
+            alertTitle.toString(),
+            alertMessage.toString(),
+            logoutText.toString(),
+            goBackText.toString()   ,
             positiveButtonAction = {
                 authViewModel.signOut()
 
@@ -88,6 +123,7 @@ class ProfileFragment : Fragment() {
 
         )
         customDialog.showDialog()
+
     }
     private fun selectImage() {
         //Android 33++
@@ -209,6 +245,33 @@ class ProfileFragment : Fragment() {
                 authViewModel.getUserData()
             }
         }
+    }
+
+
+    private fun fetchDataForUser() {
+        val userId = mAuth.currentUser?.uid // Mevcut kullanıcının ID'sini alın
+        if (userId != null) {
+            mFireStore.collection("count_down_time")
+                .whereEqualTo("userId", userId) // Kullanıcının uid'sine göre sorgula
+                .get()
+                .addOnSuccessListener { documents ->
+                    val countDownList = ArrayList<CountDownTime>()
+                    for (document in documents) {
+                        val countDownTime = document.toObject(CountDownTime::class.java)
+                        countDownList.add(countDownTime) // countDownList'e veri ekle
+                    }
+                    // Veriyi RecyclerView Adapter'a aktar
+                    adapter!!.countDownList.clear() // Önceki verileri temizle
+                    adapter!!.countDownList.addAll(countDownList)
+                    adapter!!.notifyDataSetChanged() // Adapter'ı güncelle
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Veri çekme hatası: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(requireContext(), "Kullanıcı kimliği bulunamadı", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 

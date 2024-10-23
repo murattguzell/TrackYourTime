@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.FragmentRegisterBinding
 import com.muratguzel.trackyourtime.databinding.FragmentSettingsBinding
@@ -43,10 +44,10 @@ class RegisterFragment : Fragment() {
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         observeLiveData()
         binding.toolBarAlternativeTitle.setOnClickListener {
-            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            Navigation.findNavController(it).navigate(action)
+            findNavController().popBackStack()
         }
         binding.tvTogglePasswordVisibility.setOnClickListener {
+            val currentCursorPosition = binding.etPassword.selectionStart
             if (binding.tvTogglePasswordVisibility.text.toString() == "Göster"){
                 binding.etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 binding.tvTogglePasswordVisibility.text = "Gizle"
@@ -55,6 +56,8 @@ class RegisterFragment : Fragment() {
 
                 binding.tvTogglePasswordVisibility.text = "Göster"
             }
+            binding.etPassword.setSelection(currentCursorPosition)
+
         }
         binding.registerButton.setOnClickListener {
             authViewModel.registerUser(

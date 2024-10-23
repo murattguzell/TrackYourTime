@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.UpdateSignInFragment">
 
     <LinearLayout
@@ -24,7 +24,7 @@
                 android:id="@+id/ToolBarTitle"
                 style="@style/ToolBarTitleStyle"
                 android:layout_marginTop="20dp"
-                android:text="Güncelleme işlemini tamamlamak için bilgileriniz giriniz" />
+                android:text="@string/update_info" />
 
             <TextView
                 android:id="@+id/toolBarAlternativeTitle"
@@ -72,16 +72,8 @@
 
             <TextView
                 android:id="@+id/tvPasswordShow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="15dp"
-                android:text="Göster"
-                android:textColor="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                style="@style/TVPasswordShowStyle"
+                android:text="@string/show" />
 
         </FrameLayout>
 
@@ -89,7 +81,7 @@
             android:id="@+id/confirmButton"
             style="@style/RegisterButtonStyle"
             android:layout_marginTop="60dp"
-            android:text="Onayla"
+            android:text="@string/confirm"
             android:textAllCaps="false" />
 
         <TextView

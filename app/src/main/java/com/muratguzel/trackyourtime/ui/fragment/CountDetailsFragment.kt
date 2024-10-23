@@ -1,6 +1,5 @@
 package com.muratguzel.trackyourtime.ui.fragment
 
-import CountdownHelper
 import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.PendingIntent
@@ -16,7 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -51,8 +50,11 @@ open class CountDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCountDetailsBinding.inflate(inflater, container, false)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(),R.color.statusBarColor)
         val view = binding.root
+
         return view
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,14 +63,23 @@ open class CountDetailsFragment : Fragment() {
         if (info == "old") {
             backIconClick()
             if (countDownData?.title!!.isEmpty()){
-                binding.toolBarTitle.text = "Geri Sayım"
+                binding.toolBarTitle.text = requireContext().getString(R.string.countdown)
             }else {
                 binding.toolBarTitle.text = countDownData?.title
             }
             dateAndTimeSet()
-            binding.tvDate.text =
-                "${countDownData?.targetDay}/${countDownData?.targetMonth}/${countDownData?.targetYear}"
-            binding.tvTime.text = "${countDownData?.targetHour}:${countDownData?.targetMinute}"
+            binding.tvDate.text = String.format(
+                "%02d/%02d/%04d",
+                countDownData?.targetDay,
+                countDownData?.targetMonth,
+                countDownData?.targetYear
+            )
+
+            binding.tvTime.text = String.format(
+                "%02d:%02d",
+                countDownData?.targetHour,
+                countDownData?.targetMinute
+            )
             binding.etImportanceOfTheDay.setText(countDownData?.title)
             binding.etYourNotes.setText(countDownData?.notes)
 
@@ -76,27 +87,9 @@ open class CountDetailsFragment : Fragment() {
             binding.btnUpdate.visibility = View.VISIBLE
             binding.btnDelete.visibility = View.VISIBLE
 
-            // Zamanlayıcıyı başlat
-            val calendarDate = java.util.Calendar.getInstance().apply {
-                set(java.util.Calendar.YEAR, countDownData?.targetYear!!)
-                set(java.util.Calendar.MONTH, countDownData?.targetMonth!! + 1)
-                set(java.util.Calendar.DAY_OF_MONTH, countDownData?.targetDay!!)
-            }
-
-            val calendarTime = java.util.Calendar.getInstance().apply {
-                set(java.util.Calendar.HOUR_OF_DAY, countDownData?.targetHour!!)
-                set(java.util.Calendar.MINUTE, countDownData?.targetMinute!!)
-                set(java.util.Calendar.SECOND, countDownData?.targetSecond!!)
-            }
-            binding.tvTime.text = "${countDownData?.targetHour}:${countDownData?.targetMinute}"
-            val countdownHelper = CountdownHelper(
-                FragmentCountDetailsBinding.inflate(layoutInflater),
-                countDownData?.creationTime!!
-            )
-            countdownHelper.startCountdown(calendarDate, calendarTime)
 
         } else {
-
+            binding.toolBarTitle.text = requireContext().getString(R.string.create_countdown)
             binding.btnRegister.visibility = View.VISIBLE
             binding.btnUpdate.visibility = View.GONE
             binding.btnDelete.visibility = View.GONE
@@ -112,7 +105,6 @@ open class CountDetailsFragment : Fragment() {
                 val title = binding.etImportanceOfTheDay.text.toString()
                 val notes = binding.etYourNotes.text.toString()
 
-                // Takvim nesnesinde tarih ve saati birleştir
                 val selectedCalendar = Calendar.getInstance().apply {
                     set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
                     set(Calendar.MONTH, calendarDate.get(Calendar.MONTH))
@@ -141,6 +133,8 @@ open class CountDetailsFragment : Fragment() {
                     mFirestore.collection("count_down_time").document(countDownDocumentId!!).set(targetCalendar)
                         .addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
+                                parentFragmentManager.popBackStack()
+
 
                                 Toast.makeText(
                                     requireContext(),
@@ -167,8 +161,9 @@ open class CountDetailsFragment : Fragment() {
         }
 
         binding.btnUpdate.setOnClickListener {
-            val title = binding.etImportanceOfTheDay.text.toString()
-            val notes = binding.etYourNotes.text.toString()
+
+            var title = binding.etImportanceOfTheDay.text.toString()
+            var notes = binding.etYourNotes.text.toString()
 
                 cancelAlarm(countDownData?.documentId!!)
                 calendarTime.set(Calendar.SECOND, 0)
@@ -219,6 +214,7 @@ open class CountDetailsFragment : Fragment() {
                         title
                     ).addOnCompleteListener { dbTask ->
                         if (dbTask.isSuccessful) {
+                            parentFragmentManager.popBackStack()
                             Toast.makeText(requireContext(), "Güncelleme başarılı", Toast.LENGTH_SHORT)
                                 .show()
                             val message =
@@ -241,19 +237,22 @@ open class CountDetailsFragment : Fragment() {
 
 
         binding.btnDelete.setOnClickListener {
+
             mFirestore.collection("count_down_time").document(countDownData!!.documentId!!).delete().addOnCompleteListener { deleteTask->
                 if (deleteTask.isSuccessful){
                     cancelAlarm(countDownData?.documentId!!)
+                    parentFragmentManager.popBackStack()
                     Toast.makeText(requireContext(), "silme başarılı", Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(requireContext(), "silme başarısız", Toast.LENGTH_SHORT).show()
                 }
             }
+
         }
 
     }
 
-    fun backIconClick() {
+    private fun backIconClick() {
         binding.backIcon.setOnClickListener {
             parentFragmentManager.popBackStack()
 
@@ -275,7 +274,7 @@ open class CountDetailsFragment : Fragment() {
             return
         }
 
-        // Android S ve üzeri için izin kontrolü
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
                 Toast.makeText(requireContext(), "Lütfen uygulama için kesin alarmları etkinleştirin.", Toast.LENGTH_LONG).show()
@@ -317,7 +316,7 @@ open class CountDetailsFragment : Fragment() {
 
         val intent = Intent(requireContext(), AlarmReceiver::class.java)
 
-        // requestCode olarak documentId'yi kullanıyoruz
+
         val requestCode = documentId.hashCode() // Belge ID'sinden hashCode alıyoruz
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -327,7 +326,7 @@ open class CountDetailsFragment : Fragment() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Alarmı iptal et
+
         alarmManager.cancel(pendingIntent)
     }
 

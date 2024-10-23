@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="Resim yükleniyor"
+            android:text="@string/image_upload"
             android:textColor="@color/white"
             android:textSize="20sp" />
 

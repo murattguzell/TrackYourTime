@@ -1,3 +1,4 @@
+import android.content.Context
 import android.os.CountDownTimer
 import android.text.SpannableString
 import android.text.Spanned
@@ -5,14 +6,16 @@ import android.text.style.RelativeSizeSpan
 import androidx.viewbinding.ViewBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.CountdowntimerRowBinding
 import com.muratguzel.trackyourtime.ui.fragment.CountDetailsFragment
 import java.util.Calendar
 
 class CountdownHelper(
     private val binding: ViewBinding,
-    private var getCreationTime: Long
-) : CountDetailsFragment(){
+    private var getCreationTime: Long,
+    private val context: Context // Context ekleyin
+) : CountDetailsFragment() {
     private lateinit var countdownTimer: CountDownTimer
     private var countdownMillis: Long = 0
     private lateinit var targetCalendar: Calendar
@@ -21,7 +24,7 @@ class CountdownHelper(
     fun startCountdown(calendarDate: Calendar, calendarTime: Calendar) {
         targetCalendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
-            set(Calendar.MONTH, calendarDate.get(Calendar.MONTH)-1)
+            set(Calendar.MONTH, calendarDate.get(Calendar.MONTH) - 1)
             set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH))
             set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY))
             set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE))
@@ -35,12 +38,11 @@ class CountdownHelper(
             startCountdownTimer(countdownMillis) // countdown timer başlat
         } else {
             // Geçmiş bir tarih ve saat seçildiğinde hata mesajı göster
-            showError("Tamamlanmış geri sayım")
+            showError(context.getString(R.string.completed_countdown)) // Hata mesajı kaynak kullanılarak gösterildi
         }
     }
 
     private fun startCountdownTimer(millis: Long) {
-
         if (::countdownTimer.isInitialized) {
             countdownTimer.cancel()
         }
@@ -52,7 +54,7 @@ class CountdownHelper(
             }
 
             override fun onFinish() {
-                showError("Zaman doldu!")
+                showError(context.getString(R.string.time_is_up)) // Zaman doldu mesajı kaynak kullanılarak gösterildi
             }
         }.start()
     }
@@ -68,6 +70,12 @@ class CountdownHelper(
 
         when (binding) {
             is CountdowntimerRowBinding -> binding.tvCountDown.text = countdownText
+        }
+    }
+
+    fun cancelCountdown() {
+        if (::countdownTimer.isInitialized) {
+            countdownTimer.cancel()
         }
     }
 

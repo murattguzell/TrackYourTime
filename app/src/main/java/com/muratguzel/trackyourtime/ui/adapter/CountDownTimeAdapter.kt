@@ -1,10 +1,12 @@
 package com.muratguzel.trackyourtime.ui.adapter
 
 import CountdownHelper
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.CountdowntimerRowBinding
 import java.util.Calendar
@@ -23,9 +25,22 @@ class CountDownTimeAdapter(val countDownTimeList: ArrayList<CountDownTime>,   pr
         return countDownTimeList.size
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: CViewHolder, position: Int) {
         val countDownTime = countDownTimeList[position]
-        holder.binding.tvTargetTime.text = "${countDownTime.targetDay}/${countDownTime.targetMonth}/${countDownTime.targetYear} ${countDownTime.targetHour}:${countDownTime.targetMinute}"
+        holder.binding.tvTargetTime.text = String.format(
+            "%02d/%02d/%04d %02d:%02d",
+            countDownTime.targetDay,
+            countDownTime.targetMonth,
+            countDownTime.targetYear,
+            countDownTime.targetHour,
+            countDownTime.targetMinute
+        )
+        if (countDownTime.title ==""){
+            holder.binding.tvTitle.text = holder.itemView.context.getString(R.string.countdown)
+        }else{
+            holder.binding.tvTitle.text = countDownTime.title
+        }
         Log.d("CountDownTime", "Binding position: $position, Time: $countDownTime")
 
         // Zamanlayıcıyı başlat
@@ -41,7 +56,7 @@ class CountDownTimeAdapter(val countDownTimeList: ArrayList<CountDownTime>,   pr
             set(Calendar.SECOND, countDownTime.targetSecond!!)
         }
 
-        val countdownHelper = CountdownHelper(holder.binding, countDownTime.creationTime!!)
+        val countdownHelper = CountdownHelper(holder.binding, countDownTime.creationTime!!,holder.itemView.context)
         countdownHelper.startCountdown(calendarDate, calendarTime)
         holder.binding.cardView.setOnClickListener {
             onItemClicked(countDownTime)

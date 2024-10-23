@@ -1,6 +1,7 @@
 [versions]
 agp = "8.6.0"
 circleimageview = "3.1.0"
+coreSplashscreen = "1.0.1"
 firebaseBom = "33.4.0"
 glide = "4.16.0"
 kotlin = "1.9.0"
@@ -19,6 +20,7 @@ swiperefreshlayout = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }

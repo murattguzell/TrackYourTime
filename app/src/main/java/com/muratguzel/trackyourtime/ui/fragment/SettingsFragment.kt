@@ -63,6 +63,11 @@ class SettingsFragment : Fragment() {
             )
             customDialog.showDialog()
         }
+        binding.backIcon.setOnClickListener {
+            val intent =Intent(requireContext(), MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            requireActivity().startActivity(intent)
+            requireActivity().finish()
+        }
         binding.tvAccountDetails.setOnClickListener {
             val action = SettingsFragmentDirections.actionSettingsFragmentToAccountDetailsFragment()
             Navigation.findNavController(it).navigate(action)

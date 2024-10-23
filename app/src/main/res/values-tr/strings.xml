@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">TrackYourTime</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_username">İsim Soyisim</string>
+    <string name="email">E-Posta</string>
+    <string name="password">Şifre</string>
+    <string name="create_account">Hesap oluştur</string>
+    <string name="login">Giriş</string>
+    <string name="register">Kayıt ol</string>
+    <string name="remember_me">Beni hatırla</string>
+    <string name="sign_in">Giriş yap</string>
+    <string name="forgot_your_password">"Şifrenizi mi unuttunuz?</string>
+    <string name="back">"Geri</string>
+    <string name="account_details">"Hesap Detayları</string>
+    <string name="save">"kaydet</string>
+    <string name="delete">"Sil</string>
+    <string name="update">"Güncelle</string>
+    <string name="select_date_and_time">"Lütfen tarih ve saat seçiniz!</string>
+    <string name="count_title">"O günün önemi nedir?</string>
+    <string name="your_notes">" Notlarınız</string>
+    <string name="show">Göster</string>
+    <string name="old_password">Mevcut şifre</string>
+    <string name="new_password">Yeni şifre</string>
+    <string name="new_password_again">Tekrar yeni şifre</string>
+    <string name="profile">Profil</string>
+    <string name="my_count">Sayaçlarım</string>
+    <string name="sign_out">Çıkış</string>
+    <string name="settings">Ayarlar</string>
+    <string name="password_operations">Şifre işlemleri</string>
+    <string name="log_out">Oturumu kapat</string>
+    <string name="update_info">Güncelleme işlemini tamamlamak için bilgileriniz giriniz</string>
+    <string name="confirm">Onayla</string>
+    <string name="log_out_info">Oturumunuzu kapatmak üzeresiniz emin misiniz</string>
+    <string name="go_back">Geri dön</string>
+    <string name="image_upload">Resim yükleniyor</string>
+    <string name="countdown">Geri sayım</string>
+    <string name="completed_countdown">Tamamlanmış geri sayım</string>
+    <string name="complete">tamamlandı</string>
+    <string name="one_hundred_percent_completed">100% tamamlandı!</string>
+    <string name="time_is_up">Zaman doldu!</string>
+    <string name="create_countdown">Geri sayım oluştur</string>
+    <string name="alert_title">Dikkat!</string>
+    <string name="alert_message">Oturumu kapatmak üzeresiniz emin misiniz?</string>
+    <string name="logout">Oturumu sonlandır</string>
+    <string name="no_countdown">Henüz geri sayım oluşturulmamış</string>
+
+
+</resources>

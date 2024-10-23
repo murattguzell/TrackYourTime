@@ -46,10 +46,11 @@ class AccountDetailsFragment : Fragment() {
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         settingsViewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
         observeLiveData()
-
         binding.registerButton.setOnClickListener {
             updateData(it)
-
+        }
+        binding.tvBack.setOnClickListener {
+            findNavController().popBackStack(R.id.settingsFragment, false)
         }
     }
 
@@ -63,10 +64,14 @@ class AccountDetailsFragment : Fragment() {
                     getUser!!,
                     binding.etNameSurName.text.toString(),
                     binding.etEPoasta.text.toString(),
-                    "emil",
+                    "email",
                     ""
                 )
             Navigation.findNavController(it).navigate(action)
+        } else if (binding.etNameSurName.text.toString() != getUser?.fullName) {
+            settingsViewModel.updateFullName(getUser!!, binding.etNameSurName.text.toString())
+            findNavController().popBackStack(R.id.settingsFragment, false)
+            Toast.makeText(requireContext(), "Başarıyla Güncellendi", Toast.LENGTH_SHORT).show()
         } else if (binding.etEPoasta.text.toString() != getUser?.email) {
             val action =
                 AccountDetailsFragmentDirections.actionAccountDetailsFragmentToUpdateSignInFragment(
@@ -77,10 +82,6 @@ class AccountDetailsFragment : Fragment() {
                     ""
                 )
             Navigation.findNavController(it).navigate(action)
-        } else if (binding.etNameSurName.text.toString() != getUser?.fullName) {
-            settingsViewModel.updateFullName(getUser!!, binding.etNameSurName.text.toString())
-            findNavController().popBackStack(R.id.settingsFragment, false)
-            Toast.makeText(requireContext(), "Başarıyla Güncellendi", Toast.LENGTH_SHORT).show()
         }
     }
 

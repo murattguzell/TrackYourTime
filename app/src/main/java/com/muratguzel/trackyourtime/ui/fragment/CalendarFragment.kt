@@ -1,5 +1,6 @@
 package com.muratguzel.trackyourtime.ui.fragment
 
+import CountdownHelper
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -29,11 +30,11 @@ class CalendarFragment : Fragment() {
     private val mFireStore = Firebase.firestore
     private val mAuth = Firebase.auth
     var adapter: CountDownTimeAdapter? = null
-    private var allCountDownTimes: List<CountDownTime> = listOf()
+    private var allCountDownTimes: ArrayList<CountDownTime> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.calendarStatusBarColor)
     }
 
     override fun onCreateView(
@@ -42,18 +43,24 @@ class CalendarFragment : Fragment() {
     ): View? {
 
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
-
         val view = binding.root
 
+        setAndEventRecyclerView()
 
 
+        // Veriyi çek
+        fetchDataForUser()
+        setupCalendarView()
+        return view
+    }
 
-
-    adapter = CountDownTimeAdapter(arrayListOf()) { countDownTime ->
+    private fun setAndEventRecyclerView(){
+        adapter = CountDownTimeAdapter(arrayListOf()) { countDownTime ->
 
             val fragment = CountDetailsFragment()
             val bundle = Bundle().apply {
                 putSerializable("countDownData", countDownTime) // Tüm veriyi gönder
+                putSerializable("info", "old")
             }
             fragment.arguments = bundle
 
@@ -66,13 +73,7 @@ class CalendarFragment : Fragment() {
         // RecyclerView ayarları
         binding.rvCountDown.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCountDown.adapter = adapter
-
-        // Veriyi çek
-        fetchDataForUser()
-        setupCalendarView()
-        return view
     }
-
     private fun setupCalendarView() {
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
@@ -89,15 +90,13 @@ class CalendarFragment : Fragment() {
 
             }else{
                 // Filtrelenmiş veriyi adapter'a aktar
-                adapter?.countDownTimeList?.clear() // Önceki verileri temizle
+                adapter?.countDownTimeList?.clear()
+
                 adapter?.countDownTimeList?.addAll(filteredList)
                 Log.d("FilteredCountDowns", filteredList.toString())
 
                 adapter?.notifyDataSetChanged() // Adapter'ı güncelle
             }
-
-
-
         }
     }
 
@@ -108,15 +107,12 @@ class CalendarFragment : Fragment() {
                 .whereEqualTo("userId", userId)
                 .get()
                 .addOnSuccessListener { documents ->
-                    val countDownList = mutableListOf<CountDownTime>()
+                    val countDownList = ArrayList<CountDownTime>()
                     for (document in documents) {
                         val countDownTime = document.toObject(CountDownTime::class.java)
                         countDownList.add(countDownTime)
                     }
-
                     allCountDownTimes = countDownList
-
-
                     adapter?.countDownTimeList?.clear()
                     adapter?.countDownTimeList?.addAll(countDownList)
                     adapter?.notifyDataSetChanged()

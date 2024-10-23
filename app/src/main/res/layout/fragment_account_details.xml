@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_fragment"
     tools:context=".ui.fragment.AccountDetailsFragment">
 
     <LinearLayout
@@ -26,13 +26,13 @@
                 android:id="@+id/tvBack"
                 style="@style/ToolBarAlternativeTitleStyle"
                 android:layout_gravity="start"
-                android:text="Geri"
+                android:text="@string/back"
                 android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tool_bar_title"
                 style="@style/ToolBarTitleStyle"
-                android:text="Hesap Detayları" />
+                android:text="@string/account_details" />
         </Toolbar>
     </LinearLayout>
 
@@ -55,7 +55,7 @@
             style="@style/EditTextStyle"
             android:layout_marginTop="30dp"
             android:background="@drawable/et_background"
-            android:hint="İsim soyisim"
+            android:hint="@string/name_username"
             android:inputType="text" />
 
 
@@ -64,14 +64,14 @@
             style="@style/EditTextStyle"
             android:layout_marginTop="30dp"
             android:background="@drawable/et_background"
-            android:hint="E-posta"
+            android:hint="@string/email"
             android:inputType="text" />
 
         <Button
             android:id="@+id/registerButton"
             style="@style/RegisterButtonStyle"
             android:layout_marginTop="172dp"
-            android:text="kaydet"
+            android:text="@string/save"
             android:textAllCaps="false" />
     </LinearLayout>
 
