@@ -15,7 +15,9 @@ import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.FragmentPasswordOperationsBinding
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PasswordOperationsFragment : Fragment() {
 
     private var _binding: FragmentPasswordOperationsBinding? = null

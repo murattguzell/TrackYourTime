@@ -36,7 +36,9 @@ import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
 import com.muratguzel.trackyourtime.ui.adapter.LinearProgressAdapter
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!

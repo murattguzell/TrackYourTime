@@ -1,17 +1,19 @@
 package com.muratguzel.trackyourtime.ui.viewModel
 
-import android.app.Application
 
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import com.muratguzel.trackyourtime.data.repo.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    var settingsRepository: SettingsRepository
+) : ViewModel() {
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-
-    var settingsRepository = SettingsRepository()
     var updateStatus = MutableLiveData<Boolean>()
     var updateFullNameStatus = MutableLiveData<Boolean>()
     var updatePasswordStatus = MutableLiveData<Boolean>()

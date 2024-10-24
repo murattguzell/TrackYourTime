@@ -4,9 +4,8 @@ import com.muratguzel.trackyourtime.data.dataSource.SettingsDataSource
 import com.muratguzel.trackyourtime.data.entitiy.Users
 
 
-class SettingsRepository {
+class SettingsRepository(val sds: SettingsDataSource) {
 
-    private val sds = SettingsDataSource()
 
     suspend fun updateFullName(users: Users, fullName: String): Boolean =
         sds.updateFullName(users, fullName)

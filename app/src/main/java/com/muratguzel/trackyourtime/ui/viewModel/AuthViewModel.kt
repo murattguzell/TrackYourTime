@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,9 +18,11 @@ import com.google.firebase.storage.ktx.storage
 import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import com.muratguzel.trackyourtime.data.repo.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-
-class AuthViewModel(application: Application) : AndroidViewModel(application) {
+import javax.inject.Inject
+@HiltViewModel
+class AuthViewModel @Inject constructor(val arepo: AuthRepository, application: Application) : AndroidViewModel(application) {
     var registerStatus = MutableLiveData<Boolean>()
     var loginStatus = MutableLiveData<Boolean>()
     var signOutState = MutableLiveData<Boolean>()
@@ -30,7 +31,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     val storage = Firebase.storage
     val mFirestore = Firebase.firestore
 
-    var arepo = AuthRepository()
+
 
     init {
         currentUserNavigate()

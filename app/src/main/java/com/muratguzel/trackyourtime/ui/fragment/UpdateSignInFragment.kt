@@ -15,8 +15,9 @@ import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import com.muratguzel.trackyourtime.databinding.FragmentUpdateSignInBinding
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class UpdateSignInFragment : Fragment() {
 
 

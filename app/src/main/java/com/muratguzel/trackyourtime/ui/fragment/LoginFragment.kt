@@ -14,8 +14,9 @@ import androidx.navigation.Navigation
 import com.muratguzel.trackyourtime.databinding.FragmentLoginBinding
 import com.muratguzel.trackyourtime.ui.MainActivity
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!

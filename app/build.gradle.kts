@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -63,7 +65,8 @@ dependencies {
     implementation (libs.glide)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.core.splashscreen)
-
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 
 }

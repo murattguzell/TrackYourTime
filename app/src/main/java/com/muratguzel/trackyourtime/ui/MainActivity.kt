@@ -13,7 +13,9 @@ import com.muratguzel.trackyourtime.ui.fragment.CalendarFragment
 import com.muratguzel.trackyourtime.ui.fragment.CountDownFragment
 import com.muratguzel.trackyourtime.ui.fragment.ProfileFragment
 import com.muratguzel.trackyourtime.ui.fragment.SettingsFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {

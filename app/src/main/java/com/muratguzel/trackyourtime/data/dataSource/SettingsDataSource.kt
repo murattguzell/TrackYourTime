@@ -5,11 +5,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class SettingsDataSource {
-    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val mFireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
+class SettingsDataSource @Inject constructor(
+    val mAuth: FirebaseAuth,
+    val mFireStore: FirebaseFirestore,
+) {
+
 
     suspend fun updateFullName(user: Users, newFullName: String): Boolean =
         suspendCancellableCoroutine { continuation ->
@@ -84,7 +87,7 @@ class SettingsDataSource {
                                 ?.addOnCompleteListener { updateTask ->
                                     if (updateTask.isSuccessful) {
                                         continuation.resume(true)
-                                    }else {
+                                    } else {
                                         continuation.resume(false)
                                     }
                                 }

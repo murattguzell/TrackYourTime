@@ -16,8 +16,9 @@ import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCountDetailsBinding
 import com.muratguzel.trackyourtime.databinding.FragmentCountDownBinding
 import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 open class CountDownFragment : Fragment() {
     private var _binding: FragmentCountDownBinding? = null
     // This property is only valid between onCreateView and

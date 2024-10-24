@@ -23,11 +23,12 @@ import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.Util.AlarmReceiver
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCountDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.UUID
 
-
+@AndroidEntryPoint
 open class CountDetailsFragment : Fragment() {
     private var _binding: FragmentCountDetailsBinding? = null
     private val binding get() = _binding!!
@@ -50,7 +51,8 @@ open class CountDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCountDetailsBinding.inflate(inflater, container, false)
-        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(),R.color.statusBarColor)
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.statusBarColor)
         val view = binding.root
 
         return view
@@ -62,9 +64,9 @@ open class CountDetailsFragment : Fragment() {
         backIconClick()
         if (info == "old") {
             backIconClick()
-            if (countDownData?.title!!.isEmpty()){
+            if (countDownData?.title!!.isEmpty()) {
                 binding.toolBarTitle.text = requireContext().getString(R.string.countdown)
-            }else {
+            } else {
                 binding.toolBarTitle.text = countDownData?.title
             }
             dateAndTimeSet()
@@ -130,7 +132,8 @@ open class CountDetailsFragment : Fragment() {
                         documentId = countDownDocumentId
                     )
 
-                    mFirestore.collection("count_down_time").document(countDownDocumentId!!).set(targetCalendar)
+                    mFirestore.collection("count_down_time").document(countDownDocumentId!!)
+                        .set(targetCalendar)
                         .addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
                                 parentFragmentManager.popBackStack()
@@ -143,7 +146,12 @@ open class CountDetailsFragment : Fragment() {
                                 ).show()
                                 val message =
                                     "Zaman doldu: ${targetCalendar.targetDay}/${targetCalendar.targetMonth}/${targetCalendar.targetYear}  ${targetCalendar.targetHour}:${targetCalendar.targetMinute}"
-                                setAlarm(selectedCalendar.timeInMillis, message, title,countDownDocumentId!!)
+                                setAlarm(
+                                    selectedCalendar.timeInMillis,
+                                    message,
+                                    title,
+                                    countDownDocumentId!!
+                                )
 
                             } else {
                                 Toast.makeText(
@@ -165,47 +173,48 @@ open class CountDetailsFragment : Fragment() {
             var title = binding.etImportanceOfTheDay.text.toString()
             var notes = binding.etYourNotes.text.toString()
 
-                cancelAlarm(countDownData?.documentId!!)
+            cancelAlarm(countDownData?.documentId!!)
+            calendarTime.set(Calendar.SECOND, 0)
+
+
+            // Takvim nesnesinde tarih ve saati birleştir
+            val selectedCalendar = Calendar.getInstance().apply {
+                set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
+                set(Calendar.MONTH, calendarDate.get(Calendar.MONTH))
+                set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH))
+                set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY))
+                set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE))
+                set(Calendar.SECOND, calendarTime.get(Calendar.SECOND)) // Sıfırlanmış saniye
+            }
+            if (selectedCalendar.timeInMillis > System.currentTimeMillis()) {
+                // Kaydetme işlemi burada gerçekleştirilebilir
                 calendarTime.set(Calendar.SECOND, 0)
+                var targetCalendar = CountDownTime(
+                    mAuth.currentUser!!.uid,
+                    System.currentTimeMillis(),
+                    calendarDate.get(Calendar.YEAR),
+                    calendarDate.get(Calendar.MONTH) + 1,
+                    calendarDate.get(Calendar.DATE),
+                    calendarTime.get(Calendar.HOUR_OF_DAY),
+                    calendarTime.get(Calendar.MINUTE),
+                    calendarTime.get(Calendar.SECOND),
+                    title,
+                    notes,
+                    documentId = countDownData?.documentId!!
+                )
 
-
-                // Takvim nesnesinde tarih ve saati birleştir
-                val selectedCalendar = Calendar.getInstance().apply {
-                    set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
-                    set(Calendar.MONTH, calendarDate.get(Calendar.MONTH))
-                    set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH))
-                    set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY))
-                    set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE))
-                    set(Calendar.SECOND, calendarTime.get(Calendar.SECOND)) // Sıfırlanmış saniye
-                }
-                if (selectedCalendar.timeInMillis > System.currentTimeMillis()) {
-                    // Kaydetme işlemi burada gerçekleştirilebilir
-                    calendarTime.set(Calendar.SECOND, 0)
-                    var targetCalendar = CountDownTime(
-                        mAuth.currentUser!!.uid,
-                        System.currentTimeMillis(),
-                        calendarDate.get(Calendar.YEAR),
-                        calendarDate.get(Calendar.MONTH) + 1,
-                        calendarDate.get(Calendar.DATE),
-                        calendarTime.get(Calendar.HOUR_OF_DAY),
-                        calendarTime.get(Calendar.MINUTE),
-                        calendarTime.get(Calendar.SECOND),
-                        title,
-                        notes,
-                        documentId = countDownData?.documentId!!
-                    )
-
-                    mFirestore.collection("count_down_time").document(countDownData?.documentId!!).update(
+                mFirestore.collection("count_down_time").document(countDownData?.documentId!!)
+                    .update(
                         "creationTime",
                         System.currentTimeMillis(),
                         "notes",
                         notes,
                         "targetDay",
                         calendarDate.get(Calendar.DATE),
-                        "targetHour",calendarTime.get(Calendar.HOUR_OF_DAY),
-                        "targetMinute",calendarTime.get(Calendar.MINUTE),
+                        "targetHour", calendarTime.get(Calendar.HOUR_OF_DAY),
+                        "targetMinute", calendarTime.get(Calendar.MINUTE),
                         "targetMonth",
-                        calendarDate.get(Calendar.MONTH)+1,
+                        calendarDate.get(Calendar.MONTH) + 1,
                         "targetSecond",
                         calendarTime.get(Calendar.SECOND),
                         "targetYear",
@@ -213,40 +222,48 @@ open class CountDetailsFragment : Fragment() {
                         "title",
                         title
                     ).addOnCompleteListener { dbTask ->
-                        if (dbTask.isSuccessful) {
-                            parentFragmentManager.popBackStack()
-                            Toast.makeText(requireContext(), "Güncelleme başarılı", Toast.LENGTH_SHORT)
-                                .show()
-                            val message =
-                                "Zaman doldu: ${targetCalendar.targetDay}/${targetCalendar.targetMonth}/${targetCalendar.targetYear}  ${targetCalendar.targetHour}:${targetCalendar.targetMinute}"
-                            setAlarm(selectedCalendar.timeInMillis, message, title,countDownData?.documentId!!)
-                        } else {
-                            Toast.makeText(requireContext(), "kayıt başarısız", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }.addOnFailureListener { exception->
-                        Log.e("Update","error",exception)
+                    if (dbTask.isSuccessful) {
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "Güncelleme başarılı", Toast.LENGTH_SHORT)
+                            .show()
+                        val message =
+                            "Zaman doldu: ${targetCalendar.targetDay}/${targetCalendar.targetMonth}/${targetCalendar.targetYear}  ${targetCalendar.targetHour}:${targetCalendar.targetMinute}"
+                        setAlarm(
+                            selectedCalendar.timeInMillis,
+                            message,
+                            title,
+                            countDownData?.documentId!!
+                        )
+                    } else {
+                        Toast.makeText(requireContext(), "kayıt başarısız", Toast.LENGTH_SHORT)
+                            .show()
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Geçmiş bir tarih seçiniz", Toast.LENGTH_SHORT)
-                        .show()
+                }.addOnFailureListener { exception ->
+                    Log.e("Update", "error", exception)
                 }
-
-
+            } else {
+                Toast.makeText(requireContext(), "Geçmiş bir tarih seçiniz", Toast.LENGTH_SHORT)
+                    .show()
             }
+
+
+        }
 
 
         binding.btnDelete.setOnClickListener {
 
-            mFirestore.collection("count_down_time").document(countDownData!!.documentId!!).delete().addOnCompleteListener { deleteTask->
-                if (deleteTask.isSuccessful){
-                    cancelAlarm(countDownData?.documentId!!)
-                    parentFragmentManager.popBackStack()
-                    Toast.makeText(requireContext(), "silme başarılı", Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(requireContext(), "silme başarısız", Toast.LENGTH_SHORT).show()
+            mFirestore.collection("count_down_time").document(countDownData!!.documentId!!).delete()
+                .addOnCompleteListener { deleteTask ->
+                    if (deleteTask.isSuccessful) {
+                        cancelAlarm(countDownData?.documentId!!)
+                        parentFragmentManager.popBackStack()
+                        Toast.makeText(requireContext(), "silme başarılı", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "silme başarısız", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-            }
 
         }
 
@@ -262,7 +279,7 @@ open class CountDetailsFragment : Fragment() {
 
     private fun setAlarm(
         millis: Long,
-        message: String, title: String, documentId: String
+        message: String, title: String, documentId: String,
     ) {
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -270,14 +287,22 @@ open class CountDetailsFragment : Fragment() {
         val currentTimeInMillis = System.currentTimeMillis()
 
         if (targetTimeInMillis <= currentTimeInMillis) {
-            Toast.makeText(requireContext(), "Geçmiş bir zamana alarm kurulamaz.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Geçmiş bir zamana alarm kurulamaz.",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
-                Toast.makeText(requireContext(), "Lütfen uygulama için kesin alarmları etkinleştirin.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Lütfen uygulama için kesin alarmları etkinleştirin.",
+                    Toast.LENGTH_LONG
+                ).show()
                 return
             }
         }
@@ -305,10 +330,10 @@ open class CountDetailsFragment : Fragment() {
             )
             Toast.makeText(requireContext(), "Alarm başarıyla kuruldu.", Toast.LENGTH_SHORT).show()
         } catch (e: SecurityException) {
-            Toast.makeText(requireContext(), "Alarm kurulamadı: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Alarm kurulamadı: ${e.message}", Toast.LENGTH_SHORT)
+                .show()
         }
     }
-
 
 
     private fun cancelAlarm(documentId: String) {
@@ -330,13 +355,29 @@ open class CountDetailsFragment : Fragment() {
         alarmManager.cancel(pendingIntent)
     }
 
-    private fun dateAndTimeSet(){
-        calendarDate = Calendar.getInstance().apply {
-            timeZone = TimeZone.getDefault()
+    private fun dateAndTimeSet() {
+
+        if (info == "old") {
+            calendarDate = Calendar.getInstance().apply {
+                set(Calendar.YEAR, countDownData?.targetYear!!)
+                set(Calendar.MONTH, countDownData?.targetMonth?.minus(1)!!)
+                set(Calendar.DAY_OF_MONTH, countDownData?.targetDay!!)
+                calendarTime = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, countDownData?.targetHour!!)
+                    set(Calendar.MINUTE, countDownData?.targetMinute!!)
+                }
+            }
+        } else {
+            calendarDate = Calendar.getInstance().apply {
+                timeZone = TimeZone.getDefault()
+
+            }
+            calendarTime = Calendar.getInstance().apply {
+                timeZone = TimeZone.getDefault()
+
+            }
         }
-        calendarTime = Calendar.getInstance().apply {
-            timeZone = TimeZone.getDefault()
-        }
+
         updateDateLabel(calendarDate)
         updateTimeLabel(calendarTime)
 
@@ -355,7 +396,8 @@ open class CountDetailsFragment : Fragment() {
 
         binding.tvDate.setOnClickListener {
             val initialYear = countDownData?.targetYear ?: calendarDate.get(Calendar.YEAR)
-            val initialMonth = countDownData?.targetMonth?.minus(1) ?: calendarDate.get(Calendar.MONTH)
+            val initialMonth =
+                countDownData?.targetMonth?.minus(1) ?: calendarDate.get(Calendar.MONTH)
             val initialDay = countDownData?.targetDay ?: calendarDate.get(Calendar.DAY_OF_MONTH)
 
 

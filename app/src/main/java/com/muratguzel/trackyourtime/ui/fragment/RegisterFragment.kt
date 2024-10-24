@@ -16,8 +16,9 @@ import com.muratguzel.trackyourtime.databinding.FragmentRegisterBinding
 import com.muratguzel.trackyourtime.databinding.FragmentSettingsBinding
 import com.muratguzel.trackyourtime.ui.MainActivity
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!

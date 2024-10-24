@@ -16,8 +16,9 @@ import com.muratguzel.trackyourtime.data.entitiy.Users
 import com.muratguzel.trackyourtime.databinding.FragmentAccountDetailsBinding
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AccountDetailsFragment : Fragment() {
     private var _binding: FragmentAccountDetailsBinding? = null
     private val binding get() = _binding!!

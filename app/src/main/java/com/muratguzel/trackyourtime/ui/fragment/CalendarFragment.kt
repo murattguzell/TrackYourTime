@@ -22,8 +22,9 @@ import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCalendarBinding
 import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.jvm.java
-
+@AndroidEntryPoint
 class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!

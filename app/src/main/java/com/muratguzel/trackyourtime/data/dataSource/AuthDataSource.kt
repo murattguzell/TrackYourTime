@@ -5,12 +5,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.muratguzel.trackyourtime.data.entitiy.Users
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class AuthDataSource {
+class AuthDataSource @Inject constructor(
+    private val mAuth: FirebaseAuth,
+    private val mFireStore: FirebaseFirestore,
+) {
 
-    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val mFireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     suspend fun registerUser(
         userName: String,
@@ -101,7 +103,7 @@ class AuthDataSource {
 
     suspend fun getUserData(): Users = suspendCancellableCoroutine { continuation ->
         val currentUser = mAuth.currentUser
-        if (currentUser!= null){
+        if (currentUser != null) {
             mFireStore.collection("users").document(mAuth.currentUser!!.uid)
                 .addSnapshotListener { value, error ->
                     if (value != null) {
@@ -116,8 +118,6 @@ class AuthDataSource {
 
 
     }
-
-
 
 
 }
