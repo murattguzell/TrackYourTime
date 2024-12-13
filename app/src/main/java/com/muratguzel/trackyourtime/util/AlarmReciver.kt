@@ -1,4 +1,4 @@
-package com.muratguzel.trackyourtime.Util
+package com.muratguzel.trackyourtime.util
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

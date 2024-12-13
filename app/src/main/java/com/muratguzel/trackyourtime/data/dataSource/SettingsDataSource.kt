@@ -14,7 +14,8 @@ class SettingsDataSource @Inject constructor(
 ) {
 
 
-    suspend fun updateFullName(user: Users, newFullName: String): Boolean =
+
+    suspend fun updateFullName(user: Users, newFullName: String)=
         suspendCancellableCoroutine { continuation ->
             if (user.fullName != newFullName) {
                 mFireStore.collection("users").document(user.userId!!)

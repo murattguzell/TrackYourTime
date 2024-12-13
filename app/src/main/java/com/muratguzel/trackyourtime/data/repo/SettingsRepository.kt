@@ -7,7 +7,7 @@ import com.muratguzel.trackyourtime.data.entitiy.Users
 class SettingsRepository(val sds: SettingsDataSource) {
 
 
-    suspend fun updateFullName(users: Users, fullName: String): Boolean =
+    suspend fun updateFullName(users: Users, fullName: String)=
         sds.updateFullName(users, fullName)
 
     suspend fun updateEmail(

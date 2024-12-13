@@ -66,9 +66,7 @@ class SettingsFragment : Fragment() {
             customDialog.showDialog()
         }
         binding.backIcon.setOnClickListener {
-            val intent =Intent(requireContext(), MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            requireActivity().startActivity(intent)
-            requireActivity().finish()
+
         }
         binding.tvAccountDetails.setOnClickListener {
             val action = SettingsFragmentDirections.actionSettingsFragmentToAccountDetailsFragment()
@@ -82,12 +80,7 @@ class SettingsFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // MainActivity'ye geçiş yap
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                startActivity(intent)
-
-                requireActivity().finish() // Mevcut aktiviteyi sonlandır
+               requireActivity().finish()
             }
         })
     }

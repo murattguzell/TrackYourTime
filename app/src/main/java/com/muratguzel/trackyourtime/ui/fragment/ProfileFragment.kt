@@ -26,13 +26,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.muratguzel.trackyourtime.R
-import com.muratguzel.trackyourtime.Util.imageDownload
-import com.muratguzel.trackyourtime.Util.placeHolderCreate
+import com.muratguzel.trackyourtime.util.imageDownload
+import com.muratguzel.trackyourtime.util.placeHolderCreate
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentProfileBinding
 import com.muratguzel.trackyourtime.ui.AuthActivity
 import com.muratguzel.trackyourtime.ui.SettingsActivity
-import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
 import com.muratguzel.trackyourtime.ui.adapter.LinearProgressAdapter
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
@@ -46,7 +45,6 @@ class ProfileFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var photoUri : Uri? = null
-    private var fullName:String? =null
     private lateinit var settingsViewModel: SettingsViewModel
     private val mAuth = Firebase.auth
     private val mFireStore = Firebase.firestore
@@ -55,6 +53,7 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().window.statusBarColor = resources.getColor(R.color.blue)
+
     }
 
     override fun onCreateView(
@@ -66,6 +65,13 @@ class ProfileFragment : Fragment() {
         val view = binding.root
         return view
     }
+
+    override fun onResume() {
+        super.onResume()
+        authViewModel.getUserData() // Kullanıcı verilerini tekrar çek
+
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,7 +102,7 @@ class ProfileFragment : Fragment() {
         binding.tvSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
-            requireActivity().finish()
+
         }
         binding.tvSignOut.setOnClickListener {
             signOutDialog()
@@ -242,11 +248,7 @@ class ProfileFragment : Fragment() {
                 binding.circleImage.imageDownload(imageUri,placeHolderCreate(requireContext()))
             }
         }
-        settingsViewModel.updateFullNameStatus.observe(viewLifecycleOwner){userName->
-            if (userName){
-                authViewModel.getUserData()
-            }
-        }
+
     }
 
 

@@ -1,4 +1,4 @@
-package com.muratguzel.trackyourtime.Util
+package com.muratguzel.trackyourtime.util
 
 import android.content.Context
 import android.widget.ImageView

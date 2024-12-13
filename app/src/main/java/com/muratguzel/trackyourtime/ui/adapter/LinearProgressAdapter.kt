@@ -80,7 +80,7 @@ class LinearProgressAdapter(
                 }
 
                 holder.binding.linearProgressBar.progress = percentage
-                holder.binding.tvProgressText.text = "$percentage% tamamlandı"
+                holder.binding.tvProgressText.text =" %$percentage ${holder.itemView.context.getString(R.string.complete)}"
 
                 Log.d(
                     "Progress",

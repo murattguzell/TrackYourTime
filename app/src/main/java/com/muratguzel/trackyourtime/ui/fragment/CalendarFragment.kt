@@ -84,15 +84,20 @@ class CalendarFragment : Fragment() {
                         countDownTime.targetMonth == month + 1 &&
                         countDownTime.targetDay == dayOfMonth
             }
-            if (filteredList.isEmpty()){
-                adapter?.countDownTimeList?.clear() //
-                fetchDataForUser()
-                adapter?.notifyDataSetChanged() // Adapter'ı güncelle
 
-            }else{
-                // Filtrelenmiş veriyi adapter'a aktar
+            if (filteredList.isEmpty()) {
+                // Tüm sayaçları durdur ve listeyi temizle
+                adapter?.stopAllTimers()
                 adapter?.countDownTimeList?.clear()
 
+                fetchDataForUser()
+                adapter?.notifyDataSetChanged() // Adapter'ı güncelle
+            } else {
+                // Tüm sayaçları durdur ve listeyi temizle
+                adapter?.stopAllTimers()
+                adapter?.countDownTimeList?.clear()
+
+                // Filtrelenmiş veriyi adapter'a aktar
                 adapter?.countDownTimeList?.addAll(filteredList)
                 Log.d("FilteredCountDowns", filteredList.toString())
 

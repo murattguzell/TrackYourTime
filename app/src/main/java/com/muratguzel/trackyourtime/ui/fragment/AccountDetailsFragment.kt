@@ -87,6 +87,7 @@ class AccountDetailsFragment : Fragment() {
     }
 
     private fun observeLiveData() {
+        authViewModel.getUserData()
         authViewModel.userData.observe(viewLifecycleOwner) { getUserData ->
             getUser = getUserData
             binding.etNameSurName.setText(getUserData.fullName)

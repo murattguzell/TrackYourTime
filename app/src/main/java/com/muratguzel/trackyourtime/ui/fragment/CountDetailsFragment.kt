@@ -20,7 +20,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.muratguzel.trackyourtime.R
-import com.muratguzel.trackyourtime.Util.AlarmReceiver
+import com.muratguzel.trackyourtime.util.AlarmReceiver
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCountDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint

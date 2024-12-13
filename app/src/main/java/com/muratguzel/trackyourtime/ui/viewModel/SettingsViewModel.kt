@@ -15,13 +15,13 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     var updateStatus = MutableLiveData<Boolean>()
-    var updateFullNameStatus = MutableLiveData<Boolean>()
+
     var updatePasswordStatus = MutableLiveData<Boolean>()
 
 
     fun updateFullName(users: Users, fullName: String) {
         viewModelScope.launch {
-            updateFullNameStatus.value = settingsRepository.updateFullName(users, fullName)
+            settingsRepository.updateFullName(users, fullName)
         }
     }
 

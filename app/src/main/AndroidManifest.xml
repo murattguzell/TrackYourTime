@@ -43,7 +43,7 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <receiver
-            android:name=".Util.AlarmReceiver"
+            android:name=".util.AlarmReceiver"
             android:exported="true" />
     </application>
 
