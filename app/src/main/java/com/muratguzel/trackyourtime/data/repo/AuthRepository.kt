@@ -12,4 +12,5 @@ class AuthRepository(val ads: AuthDataSource) {
     suspend fun signOut(): Boolean = ads.signOut()
     suspend fun currentUserNavigate(): Boolean = ads.currentUserNavigate()
     suspend fun getUserData(): Users = ads.getUserData()
+    suspend fun forgotPassword(email: String):Boolean = ads.forgotPassword(email)
 }

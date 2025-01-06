@@ -16,17 +16,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import androidx.lifecycle.ViewModelProvider
 import com.muratguzel.trackyourtime.R
-import com.muratguzel.trackyourtime.util.AlarmReceiver
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCountDetailsBinding
+import com.muratguzel.trackyourtime.ui.viewModel.CountDownViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.UUID
 
 @AndroidEntryPoint
 open class CountDetailsFragment : Fragment() {
@@ -34,11 +31,9 @@ open class CountDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var calendarDate: Calendar // Tarih için takvim
     private lateinit var calendarTime: Calendar
-    private val mFirestore = Firebase.firestore
-    private val mAuth = Firebase.auth
     var countDownData: CountDownTime? = null
     var info: String? = null
-    private var countDownDocumentId: String? = null
+    lateinit var countDownViewModel: CountDownViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         countDownData = arguments?.getSerializable("countDownData") as CountDownTime?
@@ -54,6 +49,7 @@ open class CountDetailsFragment : Fragment() {
         requireActivity().window.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.statusBarColor)
         val view = binding.root
+        countDownViewModel = ViewModelProvider(this)[CountDownViewModel::class.java]
 
         return view
 
@@ -101,149 +97,53 @@ open class CountDetailsFragment : Fragment() {
 
             binding.btnRegister.setOnClickListener {
 
-                countDownDocumentId = UUID.randomUUID().toString()
 
-                calendarTime.set(Calendar.SECOND, 0)
                 val title = binding.etImportanceOfTheDay.text.toString()
                 val notes = binding.etYourNotes.text.toString()
+                countDownViewModel.registerCountDown(title, notes, calendarDate, calendarTime)
+                countDownViewModel.registerCountDownStatus.observe(viewLifecycleOwner) { registerStatus ->
+                    if (registerStatus) {
+                        parentFragmentManager.popBackStack()
 
-                val selectedCalendar = Calendar.getInstance().apply {
-                    set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
-                    set(Calendar.MONTH, calendarDate.get(Calendar.MONTH))
-                    set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH))
-                    set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY))
-                    set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE))
-                    set(Calendar.SECOND, calendarTime.get(Calendar.SECOND)) // Sıfırlanmış saniye
-                }
-                if (selectedCalendar.timeInMillis > System.currentTimeMillis()) {
-                    // Kaydetme işlemi burada gerçekleştirilebilir
-                    calendarTime.set(Calendar.SECOND, 0)
-                    var targetCalendar = CountDownTime(
-                        mAuth.currentUser!!.uid,
-                        System.currentTimeMillis(),
-                        calendarDate.get(Calendar.YEAR),
-                        calendarDate.get(Calendar.MONTH) + 1,
-                        calendarDate.get(Calendar.DATE),
-                        calendarTime.get(Calendar.HOUR_OF_DAY),
-                        calendarTime.get(Calendar.MINUTE),
-                        calendarTime.get(Calendar.SECOND),
-                        title,
-                        notes,
-                        documentId = countDownDocumentId
-                    )
-
-                    mFirestore.collection("count_down_time").document(countDownDocumentId!!)
-                        .set(targetCalendar)
-                        .addOnCompleteListener { dbTask ->
-                            if (dbTask.isSuccessful) {
-                                parentFragmentManager.popBackStack()
-
-
-                                Toast.makeText(
-                                    requireContext(),
-                                    "kayıt başarılı",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                val message =
-                                    "Zaman doldu: ${targetCalendar.targetDay}/${targetCalendar.targetMonth}/${targetCalendar.targetYear}  ${targetCalendar.targetHour}:${targetCalendar.targetMinute}"
-                                setAlarm(
-                                    selectedCalendar.timeInMillis,
-                                    message,
-                                    title,
-                                    countDownDocumentId!!
-                                )
-
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "kayıt başarısız",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                } else {
-                    Toast.makeText(requireContext(), "Geçmiş bir tarih seçiniz", Toast.LENGTH_SHORT)
-                        .show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Kayıt başarılı",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Kayıt başarısız",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
+
         }
 
         binding.btnUpdate.setOnClickListener {
 
             var title = binding.etImportanceOfTheDay.text.toString()
             var notes = binding.etYourNotes.text.toString()
+            countDownViewModel.updateCountDown(
+                title,
+                notes,
+                countDownData!!.documentId!!,
+                calendarDate,
+                calendarTime
+            )
 
-            cancelAlarm(countDownData?.documentId!!)
-            calendarTime.set(Calendar.SECOND, 0)
-
-
-            // Takvim nesnesinde tarih ve saati birleştir
-            val selectedCalendar = Calendar.getInstance().apply {
-                set(Calendar.YEAR, calendarDate.get(Calendar.YEAR))
-                set(Calendar.MONTH, calendarDate.get(Calendar.MONTH))
-                set(Calendar.DAY_OF_MONTH, calendarDate.get(Calendar.DAY_OF_MONTH))
-                set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY))
-                set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE))
-                set(Calendar.SECOND, calendarTime.get(Calendar.SECOND)) // Sıfırlanmış saniye
-            }
-            if (selectedCalendar.timeInMillis > System.currentTimeMillis()) {
-                // Kaydetme işlemi burada gerçekleştirilebilir
-                calendarTime.set(Calendar.SECOND, 0)
-                var targetCalendar = CountDownTime(
-                    mAuth.currentUser!!.uid,
-                    System.currentTimeMillis(),
-                    calendarDate.get(Calendar.YEAR),
-                    calendarDate.get(Calendar.MONTH) + 1,
-                    calendarDate.get(Calendar.DATE),
-                    calendarTime.get(Calendar.HOUR_OF_DAY),
-                    calendarTime.get(Calendar.MINUTE),
-                    calendarTime.get(Calendar.SECOND),
-                    title,
-                    notes,
-                    documentId = countDownData?.documentId!!
-                )
-
-                mFirestore.collection("count_down_time").document(countDownData?.documentId!!)
-                    .update(
-                        "creationTime",
-                        System.currentTimeMillis(),
-                        "notes",
-                        notes,
-                        "targetDay",
-                        calendarDate.get(Calendar.DATE),
-                        "targetHour", calendarTime.get(Calendar.HOUR_OF_DAY),
-                        "targetMinute", calendarTime.get(Calendar.MINUTE),
-                        "targetMonth",
-                        calendarDate.get(Calendar.MONTH) + 1,
-                        "targetSecond",
-                        calendarTime.get(Calendar.SECOND),
-                        "targetYear",
-                        calendarDate.get(Calendar.YEAR),
-                        "title",
-                        title
-                    ).addOnCompleteListener { dbTask ->
-                    if (dbTask.isSuccessful) {
-                        parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "Güncelleme başarılı", Toast.LENGTH_SHORT)
-                            .show()
-                        val message =
-                            "Zaman doldu: ${targetCalendar.targetDay}/${targetCalendar.targetMonth}/${targetCalendar.targetYear}  ${targetCalendar.targetHour}:${targetCalendar.targetMinute}"
-                        setAlarm(
-                            selectedCalendar.timeInMillis,
-                            message,
-                            title,
-                            countDownData?.documentId!!
-                        )
-                    } else {
-                        Toast.makeText(requireContext(), "kayıt başarısız", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }.addOnFailureListener { exception ->
-                    Log.e("Update", "error", exception)
+            countDownViewModel.updateCountDownStatus.observe(viewLifecycleOwner) { updateStatus ->
+                if (updateStatus) {
+                    Toast.makeText(requireContext(), "güncelleme başarılı", Toast.LENGTH_SHORT)
+                        .show()
+                    parentFragmentManager.popBackStack()
+                } else {
+                    Toast.makeText(requireContext(), "güncelleme başarısız", Toast.LENGTH_SHORT)
+                        .show()
                 }
-            } else {
-                Toast.makeText(requireContext(), "Geçmiş bir tarih seçiniz", Toast.LENGTH_SHORT)
-                    .show()
+
             }
 
 
@@ -252,18 +152,16 @@ open class CountDetailsFragment : Fragment() {
 
         binding.btnDelete.setOnClickListener {
 
-            mFirestore.collection("count_down_time").document(countDownData!!.documentId!!).delete()
-                .addOnCompleteListener { deleteTask ->
-                    if (deleteTask.isSuccessful) {
-                        cancelAlarm(countDownData?.documentId!!)
-                        parentFragmentManager.popBackStack()
-                        Toast.makeText(requireContext(), "silme başarılı", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        Toast.makeText(requireContext(), "silme başarısız", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+            countDownViewModel.deleteCountDownTimer(countDownData?.documentId!!)
+            countDownViewModel.deleteCountDownStatus.observe(viewLifecycleOwner) { deleteStatus ->
+
+                if (deleteStatus) {
+                    Toast.makeText(requireContext(), "Silme başarılı", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack()
+                }else {
+                    Toast.makeText(requireContext(), "Silme başarısız", Toast.LENGTH_SHORT).show()
                 }
+            }
 
         }
 
@@ -276,84 +174,6 @@ open class CountDetailsFragment : Fragment() {
         }
     }
 
-
-    private fun setAlarm(
-        millis: Long,
-        message: String, title: String, documentId: String,
-    ) {
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val targetTimeInMillis = millis
-        val currentTimeInMillis = System.currentTimeMillis()
-
-        if (targetTimeInMillis <= currentTimeInMillis) {
-            Toast.makeText(
-                requireContext(),
-                "Geçmiş bir zamana alarm kurulamaz.",
-                Toast.LENGTH_LONG
-            ).show()
-            return
-        }
-
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                Toast.makeText(
-                    requireContext(),
-                    "Lütfen uygulama için kesin alarmları etkinleştirin.",
-                    Toast.LENGTH_LONG
-                ).show()
-                return
-            }
-        }
-
-        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
-            putExtra("notification_message", message)
-            putExtra("notification_title", title)
-            putExtra("document_id", documentId)
-        }
-
-        val requestCode = documentId.hashCode() // Belge ID'sinden hashCode alıyoruz
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        try {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                targetTimeInMillis,
-                pendingIntent
-            )
-            Toast.makeText(requireContext(), "Alarm başarıyla kuruldu.", Toast.LENGTH_SHORT).show()
-        } catch (e: SecurityException) {
-            Toast.makeText(requireContext(), "Alarm kurulamadı: ${e.message}", Toast.LENGTH_SHORT)
-                .show()
-        }
-    }
-
-
-    private fun cancelAlarm(documentId: String) {
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val intent = Intent(requireContext(), AlarmReceiver::class.java)
-
-
-        val requestCode = documentId.hashCode() // Belge ID'sinden hashCode alıyoruz
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-
-        alarmManager.cancel(pendingIntent)
-    }
 
     private fun dateAndTimeSet() {
 

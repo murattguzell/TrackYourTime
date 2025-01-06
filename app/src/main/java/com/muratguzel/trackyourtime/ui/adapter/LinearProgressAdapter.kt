@@ -13,11 +13,18 @@ import java.util.Calendar
 class LinearProgressAdapter(
     val countDownList: ArrayList<CountDownTime>,
     private val onItemClicked: (CountDownTime) -> Unit,
-) :
-    RecyclerView.Adapter<LinearProgressAdapter.LinearProgressViewHolder>() {
+) : RecyclerView.Adapter<LinearProgressAdapter.LinearProgressViewHolder>() {
+
     class LinearProgressViewHolder(val binding: ProfileRecyclerRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        // Sayaç referansı tutmak için bir değişken ekliyoruz
+        var countDownTimer: CountDownTimer? = null
+
+        // Önceki sayacı iptal etmek için bir fonksiyon ekliyoruz
+        fun stopCountdown() {
+            countDownTimer?.cancel()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinearProgressViewHolder {
@@ -33,12 +40,15 @@ class LinearProgressAdapter(
     override fun onBindViewHolder(holder: LinearProgressViewHolder, position: Int) {
         val countDownTime = countDownList[position]
 
+        // Önce eski sayacı iptal ediyoruz
+        holder.stopCountdown()
 
-        if (countDownTime.title == ""){
+        if (countDownTime.title == "") {
             holder.binding.tvCountDownTitle.text = holder.itemView.context.getString(R.string.countdown)
-        }else {
+        } else {
             holder.binding.tvCountDownTitle.text = countDownTime.title
         }
+
         holder.binding.tvTargetTime.text = String.format(
             "%02d/%02d/%04d %02d:%02d",
             countDownTime.targetDay,
@@ -48,13 +58,10 @@ class LinearProgressAdapter(
             countDownTime.targetMinute
         )
 
-// Hedef zamanı alalım (targetTime)
+        // Hedef zamanı hesaplayalım (targetTime)
         val targetDateTime = Calendar.getInstance().apply {
             set(Calendar.YEAR, countDownTime.targetYear!!)
-            set(
-                Calendar.MONTH,
-                countDownTime.targetMonth!! - 1
-            ) // Ayları sıfırdan başlattığı için 1 çıkarıyoruz
+            set(Calendar.MONTH, countDownTime.targetMonth!! - 1) // Aylar 0'dan başladığı için 1 çıkarıyoruz
             set(Calendar.DAY_OF_MONTH, countDownTime.targetDay!!)
             set(Calendar.HOUR_OF_DAY, countDownTime.targetHour!!)
             set(Calendar.MINUTE, countDownTime.targetMinute!!)
@@ -63,29 +70,24 @@ class LinearProgressAdapter(
         val targetTime = targetDateTime.timeInMillis
 
         val creationTime = countDownTime.creationTime ?: System.currentTimeMillis()
-
         val currentTime = System.currentTimeMillis()
-
         val totalDuration = targetTime - creationTime
 
-        val countDownTimer = object : CountDownTimer(targetTime - currentTime, 1000) {
+        // Yeni sayacı başlatıyoruz
+        holder.countDownTimer = object : CountDownTimer(targetTime - currentTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val elapsedTime = System.currentTimeMillis() - creationTime
                 val percentage = if (totalDuration > 0) {
-                    val calculatedPercentage =
-                        (elapsedTime.toDouble() / totalDuration.toDouble() * 100).toInt()
+                    val calculatedPercentage = (elapsedTime.toDouble() / totalDuration.toDouble() * 100).toInt()
                     if (calculatedPercentage > 100) 100 else calculatedPercentage
                 } else {
                     100
                 }
 
                 holder.binding.linearProgressBar.progress = percentage
-                holder.binding.tvProgressText.text =" %$percentage ${holder.itemView.context.getString(R.string.complete)}"
+                holder.binding.tvProgressText.text = " %$percentage ${holder.itemView.context.getString(R.string.complete)}"
 
-                Log.d(
-                    "Progress",
-                    "Toplam Süre: $totalDuration, Geçen Süre: $elapsedTime, Yüzdelik: $percentage"
-                )
+                Log.d("Progress", "Toplam Süre: $totalDuration, Geçen Süre: $elapsedTime, Yüzdelik: $percentage")
             }
 
             override fun onFinish() {
@@ -95,7 +97,8 @@ class LinearProgressAdapter(
             }
         }
 
-        countDownTimer.start()
+        holder.countDownTimer?.start()
+
         holder.binding.cardView.setOnClickListener {
             onItemClicked(countDownTime)
         }

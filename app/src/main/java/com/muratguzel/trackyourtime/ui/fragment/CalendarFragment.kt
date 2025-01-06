@@ -1,19 +1,14 @@
 package com.muratguzel.trackyourtime.ui.fragment
 
-import CountdownHelper
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.text.color
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -22,20 +17,23 @@ import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.data.entitiy.CountDownTime
 import com.muratguzel.trackyourtime.databinding.FragmentCalendarBinding
 import com.muratguzel.trackyourtime.ui.adapter.CountDownTimeAdapter
+import com.muratguzel.trackyourtime.ui.viewModel.CountDownViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 import kotlin.jvm.java
+
 @AndroidEntryPoint
 class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
-    private val mFireStore = Firebase.firestore
-    private val mAuth = Firebase.auth
     var adapter: CountDownTimeAdapter? = null
+    lateinit var countDownViewModel: CountDownViewModel
     private var allCountDownTimes: ArrayList<CountDownTime> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.calendarStatusBarColor)
+        requireActivity().window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.calendarStatusBarColor)
     }
 
     override fun onCreateView(
@@ -45,17 +43,16 @@ class CalendarFragment : Fragment() {
 
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
-
+        countDownViewModel = ViewModelProvider(this)[CountDownViewModel::class.java]
+        countDownViewModel.getUserCountDown()
         setAndEventRecyclerView()
-
-
         // Veriyi çek
         fetchDataForUser()
         setupCalendarView()
         return view
     }
 
-    private fun setAndEventRecyclerView(){
+    private fun setAndEventRecyclerView() {
         adapter = CountDownTimeAdapter(arrayListOf()) { countDownTime ->
 
             val fragment = CountDetailsFragment()
@@ -75,6 +72,7 @@ class CalendarFragment : Fragment() {
         binding.rvCountDown.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCountDown.adapter = adapter
     }
+
     private fun setupCalendarView() {
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
 
@@ -89,7 +87,6 @@ class CalendarFragment : Fragment() {
                 // Tüm sayaçları durdur ve listeyi temizle
                 adapter?.stopAllTimers()
                 adapter?.countDownTimeList?.clear()
-
                 fetchDataForUser()
                 adapter?.notifyDataSetChanged() // Adapter'ı güncelle
             } else {
@@ -107,32 +104,40 @@ class CalendarFragment : Fragment() {
     }
 
     private fun fetchDataForUser() {
-        val userId = mAuth.currentUser?.uid
-        if (userId != null) {
-            mFireStore.collection("count_down_time")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnSuccessListener { documents ->
-                    val countDownList = ArrayList<CountDownTime>()
-                    for (document in documents) {
-                        val countDownTime = document.toObject(CountDownTime::class.java)
-                        countDownList.add(countDownTime)
+        adapter?.stopAllTimers()
+
+        var newCountDownList = arrayListOf<CountDownTime>()
+        countDownViewModel.countDownList.observe(viewLifecycleOwner) { countDownList ->
+            if (countDownList != null) {
+                newCountDownList.clear()
+                for (countDownTime in countDownList) {
+                    val targetTimeInMillis = Calendar.getInstance().apply {
+                        set(Calendar.YEAR, countDownTime.targetYear!!)
+                        set(Calendar.MONTH, countDownTime.targetMonth!! - 1) // 0-based index
+                        set(Calendar.DAY_OF_MONTH, countDownTime.targetDay!!)
+                        set(Calendar.HOUR_OF_DAY, countDownTime.targetHour!!)
+                        set(Calendar.MINUTE, countDownTime.targetMinute!!)
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
+                    }.timeInMillis
+                    val currentTime = System.currentTimeMillis()
+                    // Eğer hedef tarih geçmişteyse, sayaç aktif değil
+                    if (targetTimeInMillis >= currentTime) {
+                        newCountDownList.add(countDownTime)
                     }
-                    allCountDownTimes = countDownList
-                    adapter?.countDownTimeList?.clear()
-                    adapter?.countDownTimeList?.addAll(countDownList)
-                    adapter?.notifyDataSetChanged()
                 }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(requireContext(), "Veri çekme hatası: ${exception.message}", Toast.LENGTH_SHORT).show()
+                // Veriyi RecyclerView Adapter'a aktar
+                        allCountDownTimes = newCountDownList
+                        adapter?.countDownTimeList?.clear()
+                        adapter?.stopAllTimers()
+                        adapter?.countDownTimeList?.addAll(countDownList)
+                        adapter?.notifyDataSetChanged()
+                    }
                 }
-        } else {
-            Toast.makeText(requireContext(), "Kullanıcı kimliği bulunamadı", Toast.LENGTH_SHORT).show()
-        }
+
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

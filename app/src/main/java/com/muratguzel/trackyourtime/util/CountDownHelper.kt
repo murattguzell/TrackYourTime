@@ -4,8 +4,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import androidx.viewbinding.ViewBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+
 import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.CountdowntimerRowBinding
 import com.muratguzel.trackyourtime.ui.fragment.CountDetailsFragment
@@ -96,9 +95,9 @@ class CountdownHelper(
         val remainingDaysAfterMonths = remainingDaysAfterYears % 30
 
         val countdownText = when {
-            years >= 1 -> "${years}y ${months}a ${remainingDaysAfterMonths}g \n ${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)}"
-            days >= 30 -> "${months}a ${remainingDaysAfterMonths}g \n ${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)}"
-            days >= 1 -> "${days}g \n ${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)}"
+            years >= 1 -> "${years}y${months}a${remainingDaysAfterMonths}g\n${String.format("%02d",hours)}:${String.format("%02d",minutes)}:${String.format("%02d",seconds)}"
+            days >= 30 -> "${months}a${remainingDaysAfterMonths}g \n ${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)}"
+            days >= 1 -> "${days}g\n${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)}"
             else -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
         }
 

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.FragmentLoginBinding
 import com.muratguzel.trackyourtime.ui.MainActivity
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
@@ -87,6 +88,10 @@ class LoginFragment : Fragment() {
 
                 binding.tvPasswordShow.text = "Göster"
             }
+        }
+        binding.tvForgotPassword.setOnClickListener {
+            val action = LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
+            Navigation.findNavController(it).navigate(action)
         }
     }
 

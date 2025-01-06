@@ -3,6 +3,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.muratguzel.trackyourtime.R
@@ -37,7 +38,13 @@ class CustomDialog(
 
         // Buton metinlerini güncelle
         dialogBinding.alertYes.text = positiveButtonText
-        dialogBinding.alertNo.text = negativeButtonText
+        if (negativeButtonText.isEmpty()){
+            dialogBinding.alertNo.visibility = View.GONE
+        } else {
+            dialogBinding.alertNo.text = negativeButtonText
+            dialogBinding.alertNo.visibility = View.VISIBLE
+
+        }
 
         // Yes button tıklama işlemi
         dialogBinding.alertYes.setOnClickListener {

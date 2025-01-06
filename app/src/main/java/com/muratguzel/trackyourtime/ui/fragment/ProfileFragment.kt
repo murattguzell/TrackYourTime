@@ -34,8 +34,10 @@ import com.muratguzel.trackyourtime.ui.AuthActivity
 import com.muratguzel.trackyourtime.ui.SettingsActivity
 import com.muratguzel.trackyourtime.ui.adapter.LinearProgressAdapter
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
+import com.muratguzel.trackyourtime.ui.viewModel.CountDownViewModel
 import com.muratguzel.trackyourtime.ui.viewModel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -46,8 +48,7 @@ class ProfileFragment : Fragment() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var photoUri : Uri? = null
     private lateinit var settingsViewModel: SettingsViewModel
-    private val mAuth = Firebase.auth
-    private val mFireStore = Firebase.firestore
+    lateinit var countDownViewModel: CountDownViewModel
     var adapter: LinearProgressAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +64,8 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireContext(),R.color.blue)
         val view = binding.root
+        countDownViewModel = ViewModelProvider(this)[CountDownViewModel::class.java]
+        countDownViewModel.getUserCountDown()
         return view
     }
 
@@ -253,27 +256,33 @@ class ProfileFragment : Fragment() {
 
 
     private fun fetchDataForUser() {
-        val userId = mAuth.currentUser?.uid // Mevcut kullanıcının ID'sini alın
-        if (userId != null) {
-            mFireStore.collection("count_down_time")
-                .whereEqualTo("userId", userId) // Kullanıcının uid'sine göre sorgula
-                .get()
-                .addOnSuccessListener { documents ->
-                    val countDownList = ArrayList<CountDownTime>()
-                    for (document in documents) {
-                        val countDownTime = document.toObject(CountDownTime::class.java)
-                        countDownList.add(countDownTime) // countDownList'e veri ekle
+
+
+        var newCountDownList = arrayListOf<CountDownTime>()
+        countDownViewModel.countDownList.observe(viewLifecycleOwner) { countDownList ->
+            if (countDownList != null) {
+                newCountDownList.clear()
+                for (countDownTime in countDownList) {
+                    val targetTimeInMillis = Calendar.getInstance().apply {
+                        set(Calendar.YEAR, countDownTime.targetYear!!)
+                        set(Calendar.MONTH, countDownTime.targetMonth!! - 1) // 0-based index
+                        set(Calendar.DAY_OF_MONTH, countDownTime.targetDay!!)
+                        set(Calendar.HOUR_OF_DAY, countDownTime.targetHour!!)
+                        set(Calendar.MINUTE, countDownTime.targetMinute!!)
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
+                    }.timeInMillis
+                    val currentTime = System.currentTimeMillis()
+                    // Eğer hedef tarih geçmişteyse, sayaç aktif değil
+                    if (targetTimeInMillis >= currentTime) {
+                        newCountDownList.add(countDownTime)
                     }
-                    // Veriyi RecyclerView Adapter'a aktar
-                    adapter!!.countDownList.clear() // Önceki verileri temizle
-                    adapter!!.countDownList.addAll(countDownList)
-                    adapter!!.notifyDataSetChanged() // Adapter'ı güncelle
                 }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(requireContext(), "Veri çekme hatası: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(requireContext(), "Kullanıcı kimliği bulunamadı", Toast.LENGTH_SHORT).show()
+                // Veriyi RecyclerView Adapter'a aktar
+                adapter!!.countDownList.clear()
+                adapter!!.countDownList.addAll(countDownList)
+                adapter!!.notifyDataSetChanged() // Adapter'ı güncelle
+            }
         }
 
     }

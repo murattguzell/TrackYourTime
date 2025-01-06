@@ -3,8 +3,10 @@ package com.muratguzel.trackyourtime.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.muratguzel.trackyourtime.data.dataSource.AuthDataSource
+import com.muratguzel.trackyourtime.data.dataSource.CountdownDataSource
 import com.muratguzel.trackyourtime.data.dataSource.SettingsDataSource
 import com.muratguzel.trackyourtime.data.repo.AuthRepository
+import com.muratguzel.trackyourtime.data.repo.CountDownRepository
 import com.muratguzel.trackyourtime.data.repo.SettingsRepository
 import dagger.Module
 import dagger.Provides
@@ -38,6 +40,18 @@ class AppModule {
     @Singleton
     fun provideSettingsRepository(sds:SettingsDataSource): SettingsRepository {
         return SettingsRepository(sds)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCountDownDataSource(mAuth: FirebaseAuth, mFireStore: FirebaseFirestore): CountdownDataSource {
+        return CountdownDataSource(mAuth, mFireStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCountDownRepository(cds: CountdownDataSource): CountDownRepository {
+        return CountDownRepository(cds)
     }
     @Provides
     @Singleton

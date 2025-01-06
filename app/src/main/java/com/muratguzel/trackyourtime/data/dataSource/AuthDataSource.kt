@@ -118,6 +118,17 @@ class AuthDataSource @Inject constructor(
 
 
     }
+    suspend fun forgotPassword(email: String): Boolean = suspendCancellableCoroutine { continuation ->
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+        if (task.isSuccessful){
+            continuation.resume(true)
+        }else{
+            continuation.resume(false)
+        }
+
+        }
+
+    }
 
 
 }

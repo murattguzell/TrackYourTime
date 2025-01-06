@@ -21,8 +21,10 @@ import com.muratguzel.trackyourtime.data.repo.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
-class AuthViewModel @Inject constructor(val arepo: AuthRepository, application: Application) : AndroidViewModel(application) {
+class AuthViewModel @Inject constructor(val arepo: AuthRepository, application: Application) :
+    AndroidViewModel(application) {
     var registerStatus = MutableLiveData<Boolean>()
     var loginStatus = MutableLiveData<Boolean>()
     var signOutState = MutableLiveData<Boolean>()
@@ -30,14 +32,18 @@ class AuthViewModel @Inject constructor(val arepo: AuthRepository, application: 
     var userData = MutableLiveData<Users>()
     val storage = Firebase.storage
     val mFirestore = Firebase.firestore
-
+    val forgotPasswordStatus = MutableLiveData<Boolean>()
 
 
     init {
         currentUserNavigate()
         getUserData()
     }
-
+    fun forgotPassword(email: String) {
+        viewModelScope.launch {
+            forgotPasswordStatus.value = arepo.forgotPassword(email)
+        }
+    }
     fun registerUser(userName: String, email: String, password: String) {
 
 
@@ -103,4 +109,6 @@ class AuthViewModel @Inject constructor(val arepo: AuthRepository, application: 
                 }
         }
     }
+
+
 }

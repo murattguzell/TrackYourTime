@@ -8,15 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import com.muratguzel.trackyourtime.R
 import com.muratguzel.trackyourtime.databinding.FragmentSettingsBinding
 import com.muratguzel.trackyourtime.ui.AuthActivity
-import com.muratguzel.trackyourtime.ui.MainActivity
 import com.muratguzel.trackyourtime.ui.viewModel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,7 +61,7 @@ class SettingsFragment : Fragment() {
             customDialog.showDialog()
         }
         binding.backIcon.setOnClickListener {
-
+            requireActivity().finish()
         }
         binding.tvAccountDetails.setOnClickListener {
             val action = SettingsFragmentDirections.actionSettingsFragmentToAccountDetailsFragment()
